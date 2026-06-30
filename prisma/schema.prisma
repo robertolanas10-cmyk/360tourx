@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Reserva {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+
+  // Cliente
+  nombre         String
+  email          String
+  telefono       String?
+  direccion      String
+
+  // Servicio
+  servicio       String   // '100m2' | '200m2' | '300m2' | '300m2plus'
+  servicioNombre String
+  conHostingWeb  Boolean  @default(false)
+  precio         Decimal? @db.Decimal(10, 2)
+
+  // Visita
+  fechaVisita    DateTime?
+  horaVisita     String?
+
+  // Pago
+  estadoPago     String   @default("pendiente") // 'pendiente' | 'completado' | 'fallido'
+  metodoPago     String?  // 'stripe' | 'paypal'
+  stripeId       String?  // PaymentIntent ID de Stripe
+  paypalId       String?
+
+  @@map("reservas")
+}
+
+model Contacto {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+
+  nombre      String
+  apellido    String?
+  email       String
+  telefono    String?
+  empresa     String?
+  posicion    String?
+  mensaje     String   @db.Text
+  tipo        String   @default("contacto") // 'contacto' | 'presupuesto_plus300' | 'inmobiliaria'
+
+  @@map("contactos")
+}

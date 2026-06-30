@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Environment variables (NUNCA subir al repositorio)
+.env
+.env.local
+.env.*.local
+
+# Prisma
+prisma/dev.db
+
+# Misc
+.DS_Store
+*.log
