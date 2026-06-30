@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Phone, Mail, MapPin, Instagram, Facebook } from 'lucide-react'
+import { Phone, Mail, MapPin, Instagram, Facebook, Linkedin } from 'lucide-react'
 
 const footerLinks = {
   servicios: [
@@ -64,7 +64,7 @@ export default function Footer() {
             {/* Social */}
             <div className="flex items-center gap-3 pt-1">
               <a
-                href="https://www.instagram.com/"
+                href="https://www.instagram.com/360tourx_oficial/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-lg border border-[#1e1e2e] flex items-center justify-center text-slate-400 hover:text-violet-400 hover:border-violet-500/50 transition-all"
@@ -73,7 +73,7 @@ export default function Footer() {
                 <Instagram size={16} />
               </a>
               <a
-                href="https://www.facebook.com/"
+                href="https://www.facebook.com/360tourx_oficial/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-lg border border-[#1e1e2e] flex items-center justify-center text-slate-400 hover:text-violet-400 hover:border-violet-500/50 transition-all"
@@ -81,17 +81,15 @@ export default function Footer() {
               >
                 <Facebook size={16} />
               </a>
-              {/* TikTok */}
+              {/* LinkedIn */}
               <a
-                href="https://www.tiktok.com/"
+                href="https://www.linkedin.com/company/360tourx/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-lg border border-[#1e1e2e] flex items-center justify-center text-slate-400 hover:text-violet-400 hover:border-violet-500/50 transition-all"
-                aria-label="TikTok"
+                aria-label="LinkedIn"
               >
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                  <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.3 6.3 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.17 8.17 0 004.77 1.52V6.76a4.85 4.85 0 01-1-.07z" />
-                </svg>
+                <Linkedin size={16} />
               </a>
             </div>
           </div>

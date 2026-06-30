@@ -64,12 +64,12 @@ export default function InmobiliariasPage() {
                 una visibilidad realista y certera de todo tipo de inmuebles. Entrega en 48-72 horas garantizada.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link href="/reserva" className="btn-primary text-base px-8">
-                  Reservar tour
+                <a href="#contacto" className="btn-primary text-base px-8">
+                  Agenda una llamada gratuita
                   <ArrowRight size={18} />
-                </Link>
-                <a href="#contacto" className="btn-outline text-base px-8">
-                  Solicitar tarifa
+                </a>
+                <a href="tel:+34644857326" className="btn-outline text-base px-8">
+                  Llámanos ahora
                 </a>
               </div>
             </div>
