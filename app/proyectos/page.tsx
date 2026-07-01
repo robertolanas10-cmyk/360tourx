@@ -29,7 +29,7 @@ const projects = [
     description:
       'Recorrido virtual por las instalaciones de Delphina Madrid, permitiendo a futuros huéspedes explorar habitaciones, zonas comunes y servicios antes de reservar.',
     tourUrl: 'https://delphinamadrid.360tourx.com',
-    thumbnail: 'https://delphinamadrid.360tourx.com/socialThumbnail.jpg',
+    thumbnail: '/delphina.png',
   },
   {
     id: 3,
@@ -98,6 +98,10 @@ export default function ProyectosPage() {
                       </div>
                     </div>
                   )}
+                  {/* Badge 360° */}
+                  <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-2.5 py-1 rounded-full border border-white/10">
+                    360°
+                  </div>
                   {/* Hover overlay */}
                   <a
                     href={project.tourUrl}

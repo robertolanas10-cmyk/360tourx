@@ -33,6 +33,10 @@ model Reserva {
   stripeId       String?  // PaymentIntent ID de Stripe
   paypalId       String?
 
+  // Tour
+  estadoTour     String   @default("pendiente") // 'pendiente' | 'en_proceso' | 'completado' | 'entregado'
+  notas          String?  @db.Text
+
   @@map("reservas")
 }
 
