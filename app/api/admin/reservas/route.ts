@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+// Siempre leer datos frescos de la BD (no cachear en build)
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const reservas = await prisma.reserva.findMany({
