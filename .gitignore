@@ -16,3 +16,7 @@ prisma/dev.db
 # Misc
 .DS_Store
 *.log
+
+# SSH keys
+*.pem
+server_key*
