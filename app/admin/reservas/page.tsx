@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { PagoBadge, TourBadge } from '../page'
+import { PagoBadge, TourBadge } from '../badges'
 
 interface Reserva {
   id: number
