@@ -132,8 +132,6 @@ export default function HomePage() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-violet-600/10 border border-violet-500/20 rounded-full px-4 py-2 mb-8">
               <span className="w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/test-bandera-espana.svg" alt="España" className="w-5 h-auto rounded-sm" />
               <span className="text-violet-400 text-sm font-medium">Tours virtuales desde 290€</span>
             </div>
 
