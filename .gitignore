@@ -20,3 +20,6 @@ prisma/dev.db
 # SSH keys
 *.pem
 server_key*
+
+# Stripe CLI local (no commitear)
+/tools/

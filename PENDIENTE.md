@@ -11,12 +11,11 @@
    - Actualizar Navbar y Footer para usar la imagen real en vez del placeholder de texto
    - Ajustar tamaño y proporción
 
-2. **Conectar pagos Stripe**
-   - Crear cuenta en https://dashboard.stripe.com
-   - Copiar claves a `.env.local` (NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY y STRIPE_SECRET_KEY)
-   - Activar Apple Pay y Google Pay en el dashboard de Stripe
-   - Verificar dominio para Apple Pay
-   - Configurar webhook para recibir eventos de pago confirmado
+2. ~~**Conectar pagos Stripe**~~ ✅ HECHO (probado en local con claves test + webhook)
+   - Claves test en `.env.local`, pagos confirmados vía webhook (reserva → `completado`).
+   - **Pendiente para producción:** poner claves `live`, crear el webhook en el Dashboard de
+     Stripe apuntando a `https://www.360tourx.com/api/stripe-webhook` y meter su `whsec_` en el
+     hosting. Opcional: activar Apple Pay / Google Pay y verificar dominio.
 
 3. **Formulario de reunión para +300m²**
    - Al pulsar "Solicitar presupuesto" en el plan +300m², mostrar un formulario dedicado

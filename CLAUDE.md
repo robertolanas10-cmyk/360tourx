@@ -15,7 +15,7 @@ Contacto real del negocio: `hola@360tourx.com` · `+34 644 85 73 26` · Madrid, 
 
 - **Next.js 14.2.5** (App Router) + **TypeScript** (strict)
 - **Tailwind CSS** (tema oscuro, marca violeta)
-- **Prisma** ORM sobre **MySQL**
+- **Prisma** ORM sobre **PostgreSQL** (Neon)
 - **Stripe** (tarjeta / Apple Pay / Google Pay) + **PayPal** (aún placeholder)
 - **Nodemailer** (SMTP) para emails de contacto
 - `lucide-react` (iconos), `framer-motion`, `react-hook-form`
@@ -64,7 +64,7 @@ components/
   SiteShell.tsx        # decide si mostrar Navbar/Footer (según ruta)
   Navbar.tsx  Footer.tsx  ContactForm.tsx
 lib/prisma.ts          # singleton de PrismaClient (evita múltiples conexiones en dev)
-prisma/schema.prisma   # modelos Reserva y Contacto (MySQL)
+prisma/schema.prisma   # modelos Reserva y Contacto (PostgreSQL / Neon)
 public/                # logo.png, logo.svg, imágenes
 ```
 
@@ -84,7 +84,7 @@ repetir cadenas largas de Tailwind:
   tarjetas `#111118`, bordes `#1e1e2e`.
 - Fuente: **Inter**. Tema oscuro en todo el sitio.
 
-## Modelo de datos (Prisma / MySQL)
+## Modelo de datos (Prisma / PostgreSQL — Neon)
 
 - **`Reserva`** (`reservas`): datos del cliente + servicio + visita + pago + estado del tour.
   - `servicio`: `'100m2' | '200m2' | '300m2' | '300m2plus'`
@@ -117,9 +117,12 @@ Si cambias uno, cambia el otro. Moneda: **EUR**, precios mostrados "+ IVA".
 
 ## Gotchas / estado real del proyecto
 
-- **⚠️ No hay webhook de Stripe.** Nada marca la reserva como `completado`; el `estadoPago` se
-  queda en `pendiente` para siempre. Si trabajas en pagos, probablemente haya que crear
-  `app/api/stripe-webhook/route.ts` y actualizar la `Reserva` por `metadata.reservaId`.
+- **✅ Webhook de Stripe funcionando.** [app/api/stripe-webhook/route.ts](app/api/stripe-webhook/route.ts)
+  escucha `payment_intent.succeeded` / `payment_intent.payment_failed` y actualiza la `Reserva`
+  por `metadata.reservaId` (a `completado` / `fallido`). Necesita `STRIPE_WEBHOOK_SECRET`.
+  Probado en local end-to-end con claves de test + Stripe CLI (`stripe listen --forward-to
+  localhost:3000/api/stripe-webhook`). **En producción** hay que crear el endpoint en el Dashboard
+  de Stripe (→ `https://www.360tourx.com/api/stripe-webhook`) para obtener el `whsec_` definitivo.
 - **⚠️ El panel `/admin` no tiene autenticación** (ni las rutas `/api/admin/*`). Cualquiera puede
   entrar. No hay `middleware.ts`. Añadir protección antes de exponer en producción.
 - **PayPal es un placeholder**: abre una URL legacy de PayPal en otra pestaña y no registra el pago.
@@ -129,7 +132,7 @@ Si cambias uno, cambia el otro. Moneda: **EUR**, precios mostrados "+ IVA".
 
 ## Variables de entorno
 
-- `DATABASE_URL` va en **`.env`** (MySQL).
+- `DATABASE_URL` va en **`.env`** (PostgreSQL / Neon).
 - El resto va en **`.env.local`**: `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_SECRET_KEY`,
   (`STRIPE_WEBHOOK_SECRET` cuando exista el webhook), `NEXT_PUBLIC_PAYPAL_CLIENT_ID`,
   `EMAIL_HOST/PORT/USER/PASS/TO`, `NEXT_PUBLIC_SITE_URL`.
