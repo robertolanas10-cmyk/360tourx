@@ -90,6 +90,9 @@ export default function BookingClient() {
     address: '',
   })
   const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [discountCode, setDiscountCode] = useState('')
+  const [discountError, setDiscountError] = useState<string | null>(null)
+  const [chargedAmount, setChargedAmount] = useState<number | null>(null)
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'paypal'>('stripe')
   const [meetingDescription, setMeetingDescription] = useState('')
   const [meetingType, setMeetingType] = useState<'video' | 'phone' | 'presencial'>('video')
@@ -123,6 +126,7 @@ export default function BookingClient() {
     }
 
     // Create Stripe payment intent
+    setDiscountError(null)
     try {
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
@@ -130,18 +134,23 @@ export default function BookingClient() {
         body: JSON.stringify({
           serviceId: selectedService.id,
           withAddon: withWebAddon,
-          amount: Math.round((totalPrice || 0) * 100), // cents
           customerEmail: contactInfo.email,
           customerName: contactInfo.name,
           bookingDate: selectedDate,
           bookingTime: selectedTime,
           address: contactInfo.address,
+          discountCode: discountCode.trim() || undefined,
         }),
       })
       const data = await res.json()
-      if (data.clientSecret) {
+      if (res.ok && data.clientSecret) {
         setClientSecret(data.clientSecret)
+        if (typeof data.amount === 'number') setChargedAmount(data.amount / 100)
         setStep(3)
+      } else if (data.error === 'codigo_invalido') {
+        setDiscountError('Ese código de descuento no es válido.')
+      } else {
+        alert('Error al procesar. Inténtalo de nuevo o llámanos.')
       }
     } catch (err) {
       alert('Error al procesar. Inténtalo de nuevo o llámanos.')
@@ -447,6 +456,28 @@ export default function BookingClient() {
             )}
           </div>
 
+          {/* Código de descuento (solo servicios de pago) */}
+          {!isCustomQuote && (
+            <div className="mb-6">
+              <label className="text-sm text-slate-400 mb-1.5 block">
+                Código de descuento <span className="text-slate-600">(opcional)</span>
+              </label>
+              <input
+                type="text"
+                value={discountCode}
+                onChange={(e) => {
+                  setDiscountCode(e.target.value)
+                  setDiscountError(null)
+                }}
+                className="input-field uppercase"
+                placeholder="Introduce tu código"
+              />
+              {discountError && (
+                <p className="text-red-400 text-xs mt-1.5">{discountError}</p>
+              )}
+            </div>
+          )}
+
           <div className="flex gap-3">
             <button
               onClick={() => setStep(1)}
@@ -640,7 +671,7 @@ export default function BookingClient() {
                   }}
                 >
                   <CheckoutForm
-                    amount={totalPrice!}
+                    amount={chargedAmount ?? totalPrice!}
                     onBack={() => setStep(2)}
                     bookingDetails={{
                       service: selectedService.title,

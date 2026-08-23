@@ -19,6 +19,32 @@ const SERVICE_NAMES: Record<string, string> = {
   '300m2': 'Tour Virtual hasta 300m²',
 }
 
+// Stripe no permite cobrar menos de 0,50 € en euros.
+const STRIPE_MIN_AMOUNT = 50
+
+type Descuento = { type: 'percent' | 'fixed'; value: number }
+
+// Lee los códigos de descuento de la variable de entorno CODIGOS_DESCUENTO.
+// Formato: "CODIGO=valor" separados por comas. Si el valor termina en "%" es un
+// descuento porcentual; si no, es el precio final fijo en euros.
+//   Ej: "PRUEBA360=0.50,LANZAMIENTO=15%"
+function getDescuento(codigo: string): Descuento | null {
+  const raw = process.env.CODIGOS_DESCUENTO
+  if (!raw || !codigo) return null
+  const objetivo = codigo.trim().toUpperCase()
+  for (const entrada of raw.split(',')) {
+    const [c, v] = entrada.split('=').map((s) => (s || '').trim())
+    if (!c || !v || c.toUpperCase() !== objetivo) continue
+    if (v.endsWith('%')) {
+      const pct = parseFloat(v.slice(0, -1).replace(',', '.'))
+      return isNaN(pct) ? null : { type: 'percent', value: pct }
+    }
+    const eur = parseFloat(v.replace(',', '.'))
+    return isNaN(eur) ? null : { type: 'fixed', value: eur }
+  }
+  return null
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
@@ -30,6 +56,7 @@ export async function POST(req: NextRequest) {
       bookingDate,
       bookingTime,
       address,
+      discountCode,
     } = body
 
     const serviceAmount = PRICE_MAP[serviceId]
@@ -39,7 +66,31 @@ export async function POST(req: NextRequest) {
 
     const addonAmount = withAddon ? PRICE_MAP['web_addon'] : 0
     const totalAmount = serviceAmount + addonAmount
-    const totalEuros = totalAmount / 100
+
+    // Aplicar código de descuento (validado en el servidor, antes de crear la reserva)
+    let finalAmount = totalAmount
+    let notaDescuento: string | null = null
+    let codigoAplicado: string | null = null
+    const codigo = (discountCode || '').trim()
+    if (codigo) {
+      const desc = getDescuento(codigo)
+      if (!desc) {
+        return NextResponse.json({ error: 'codigo_invalido' }, { status: 400 })
+      }
+      finalAmount =
+        desc.type === 'percent'
+          ? Math.round(totalAmount * (1 - desc.value / 100))
+          : Math.round(desc.value * 100)
+      if (finalAmount < STRIPE_MIN_AMOUNT) finalAmount = STRIPE_MIN_AMOUNT
+      codigoAplicado = codigo.toUpperCase()
+      notaDescuento = `Código "${codigoAplicado}" aplicado: ${(finalAmount / 100)
+        .toFixed(2)
+        .replace('.', ',')}€ (precio original ${(totalAmount / 100)
+        .toFixed(2)
+        .replace('.', ',')}€)`
+    }
+
+    const finalEuros = finalAmount / 100
 
     // Guardar reserva en base de datos (pendiente de pago)
     const reserva = await prisma.reserva.create({
@@ -50,11 +101,12 @@ export async function POST(req: NextRequest) {
         servicio: serviceId,
         servicioNombre: SERVICE_NAMES[serviceId] || serviceId,
         conHostingWeb: withAddon || false,
-        precio: totalEuros,
+        precio: finalEuros,
         fechaVisita: bookingDate ? new Date(bookingDate) : null,
         horaVisita: bookingTime || null,
         estadoPago: 'pendiente',
         metodoPago: 'stripe',
+        notas: notaDescuento,
       },
     })
 
@@ -78,7 +130,7 @@ export async function POST(req: NextRequest) {
 
     // Crear PaymentIntent
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: totalAmount,
+      amount: finalAmount,
       currency: 'eur',
       customer: customer.id,
       receipt_email: customerEmail,
@@ -92,6 +144,7 @@ export async function POST(req: NextRequest) {
         address,
         customerName,
         customerEmail,
+        ...(codigoAplicado ? { codigoDescuento: codigoAplicado } : {}),
       },
       description: `360TourX - ${SERVICE_NAMES[serviceId]}${withAddon ? ' + Web Hosting' : ''} | ${bookingDate} ${bookingTime}`,
     })
@@ -104,7 +157,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       clientSecret: paymentIntent.client_secret,
-      amount: totalAmount,
+      amount: finalAmount,
       reservaId: reserva.id,
     })
   } catch (error) {
