@@ -23,3 +23,4 @@ server_key*
 
 # Stripe CLI local (no commitear)
 /tools/
+*.tsbuildinfo
