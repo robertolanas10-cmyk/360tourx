@@ -78,7 +78,7 @@ export default function LandingPage() {
             </p>
             <div className="lp-actions">
               <a href="#contacto" className="lp-btn-primary">Quiero mi Tour Virtual →</a>
-              <a href="https://www.360tourx.com/projects-7" target="_blank" rel="noopener noreferrer" className="lp-btn-secondary">Ver Proyectos ▶</a>
+              <a href="/proyectos" target="_blank" rel="noopener noreferrer" className="lp-btn-secondary">Ver Proyectos ▶</a>
             </div>
             <div className="lp-stats">
               <div style={{ textAlign: 'center' }}>

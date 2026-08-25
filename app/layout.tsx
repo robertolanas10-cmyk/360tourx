@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    url: 'https://www.360tourx.com',
+    url: 'https://360tourx.com',
     siteName: '360TourX',
     title: '360TourX | Tours Virtuales 360° en Madrid',
     description:
