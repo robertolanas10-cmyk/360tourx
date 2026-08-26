@@ -44,8 +44,8 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-2 group">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.png" alt="360TourX" className="w-9 h-9" />
-            <span className="font-bold text-white text-lg tracking-tight">
-              360Tour<span className="text-violet-400">X</span>
+            <span className="font-bold text-white text-lg tracking-tight leading-none">
+              360Tour<span className="gradient-text font-extrabold text-[1.7em] leading-none inline-block align-baseline transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_0_14px_rgba(167,139,250,0.55)]">X</span>
             </span>
           </Link>
 
