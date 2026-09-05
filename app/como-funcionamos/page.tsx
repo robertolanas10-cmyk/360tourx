@@ -86,7 +86,7 @@ export default function ComoFuncionamosPage() {
           </p>
           <h1 className="section-title mb-6">
             De la reserva al tour en{' '}
-            <span className="gradient-text">menos de 23 horas</span>
+            <span className="gradient-text">menos de 24 horas</span>
           </h1>
           <p className="text-xl text-slate-400 leading-relaxed">
             Un proceso simple, profesional y sin complicaciones. Te acompañamos en cada paso.
