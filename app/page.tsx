@@ -281,13 +281,13 @@ export default function HomePage() {
               </div>
               <p className="text-slate-400 text-sm">
                 Sube tu tour virtual a tu página web con hosting seguro y certificado SSL wildcard
-                incluido.
+                incluido. Pago único que cubre el primer año, sin renovación automática.
               </p>
             </div>
             <div className="flex items-center gap-4 shrink-0">
               <div className="text-right">
                 <span className="text-2xl font-bold text-white">19,99€</span>
-                <span className="text-slate-500 text-sm block">/ año</span>
+                <span className="text-slate-500 text-sm block">primer año</span>
               </div>
               <Link href="/precios" className="btn-outline text-sm">
                 Ver planes
@@ -404,9 +404,9 @@ export default function HomePage() {
               },
               {
                 name: 'Delphina Madrid',
-                type: 'Hotel & Alojamiento',
+                type: 'Restaurante & Terraza',
                 url: 'https://delphinamadrid.360tourx.com',
-                tag: 'Hotel',
+                tag: 'Restaurante',
                 thumbnail: 'https://delphinamadrid.360tourx.com/socialThumbnail.jpg',
               },
               {

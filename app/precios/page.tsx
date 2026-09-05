@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle, Globe } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Planes y Precios',
   description:
-    'Precios transparentes para tours virtuales 360° en Madrid. Desde 290€ con entrega en 48h. Opción de hosting del tour en tu web por 19,99€/año.',
+    'Precios transparentes para tours virtuales 360° en Madrid. Desde 290€ con entrega en 48h. Opción de hosting del tour en tu web por 19,99€ el primer año.',
 }
 
 const mainPlans = [
@@ -58,30 +58,30 @@ const addOns = [
     title: 'Tour Virtual 100m² + Membresía Web',
     tourPrice: '290',
     membershipPrice: '19,99',
-    period: 'año',
+    period: 'el primer año de hosting',
     description:
-      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo.',
-    features: ['Hosting del tour para web', 'Certificado SSL wildcard', 'Enlace seguro HTTPS'],
+      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo. El pago cubre el primer año y no se renueva automáticamente.',
+    features: ['Hosting del tour durante 1 año', 'Certificado SSL wildcard', 'Enlace seguro HTTPS'],
     href: '/reserva?servicio=100m2&addon=web',
   },
   {
     title: 'Tour Virtual 200m² + Membresía Web',
     tourPrice: '390',
     membershipPrice: '19,99',
-    period: 'año',
+    period: 'el primer año de hosting',
     description:
-      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo.',
-    features: ['Hosting del tour para web', 'Certificado SSL wildcard', 'Enlace seguro HTTPS'],
+      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo. El pago cubre el primer año y no se renueva automáticamente.',
+    features: ['Hosting del tour durante 1 año', 'Certificado SSL wildcard', 'Enlace seguro HTTPS'],
     href: '/reserva?servicio=200m2&addon=web',
   },
   {
     title: 'Tour Virtual 300m² + Membresía Web',
     tourPrice: '490',
     membershipPrice: '19,99',
-    period: 'año',
+    period: 'el primer año de hosting',
     description:
-      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo.',
-    features: ['Hosting del tour para web', 'Certificado SSL wildcard', 'Enlace seguro HTTPS'],
+      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo. El pago cubre el primer año y no se renueva automáticamente.',
+    features: ['Hosting del tour durante 1 año', 'Certificado SSL wildcard', 'Enlace seguro HTTPS'],
     href: '/reserva?servicio=300m2&addon=web',
   },
 ]
@@ -182,7 +182,7 @@ export default function PreciosPage() {
             </h2>
             <p className="text-slate-400 max-w-xl mx-auto">
               Añade nuestra membresía anual y sube tu tour virtual a tu página web de forma segura.
-              Hosting incluido con certificado SSL wildcard.
+              Primer año de hosting incluido, con certificado SSL wildcard.
             </p>
           </div>
 
@@ -197,7 +197,7 @@ export default function PreciosPage() {
                   </div>
                   <div className="flex items-baseline gap-1">
                     <span className="text-lg font-bold text-violet-400">+€{addon.membershipPrice}</span>
-                    <span className="text-slate-500 text-xs">/{addon.period} hosting</span>
+                    <span className="text-slate-500 text-xs">{addon.period}</span>
                   </div>
                 </div>
                 <p className="text-slate-400 text-sm leading-relaxed mb-5">{addon.description}</p>

@@ -50,7 +50,7 @@ const webAddon = {
   title: 'Hosting del tour en tu web',
   price: 19.99,
   priceId: 'price_web_addon',
-  description: 'Sube tu tour a tu web con SSL wildcard incluido. +19,99€/año',
+  description: 'Sube tu tour a tu web con SSL wildcard incluido. +19,99€ por el primer año (pago único, sin renovación automática).',
 }
 
 const availableDates = () => {
@@ -278,7 +278,7 @@ export default function BookingClient() {
                   </div>
                   <div>
                     <div className="font-semibold text-white text-sm">{webAddon.title}</div>
-                    <div className="text-violet-400 font-bold">+{webAddon.price}€/año</div>
+                    <div className="text-violet-400 font-bold">+{webAddon.price}€ primer año</div>
                     <div className="text-slate-500 text-xs mt-1">{webAddon.description}</div>
                   </div>
                 </div>
@@ -347,7 +347,7 @@ export default function BookingClient() {
               <div className="text-sm text-slate-400 mb-1">Resumen:</div>
               <div className="text-white font-semibold">{selectedService.title}</div>
               {withWebAddon && (
-                <div className="text-slate-400 text-sm">+ Hosting web (19,99€/año)</div>
+                <div className="text-slate-400 text-sm">+ Hosting web · primer año (19,99€)</div>
               )}
               {selectedDate && selectedTime && (
                 <div className="text-slate-500 text-xs mt-1">

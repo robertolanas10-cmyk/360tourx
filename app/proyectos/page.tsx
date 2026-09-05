@@ -23,11 +23,11 @@ const projects = [
   {
     id: 2,
     title: 'Delphina Madrid',
-    subtitle: 'Hotel & Alojamiento',
+    subtitle: 'Restaurante & Terraza',
     location: 'Madrid',
     category: 'Hostelería',
     description:
-      'Recorrido virtual por las instalaciones de Delphina Madrid, permitiendo a futuros huéspedes explorar habitaciones, zonas comunes y servicios antes de reservar.',
+      'Recorrido virtual por Delphina Madrid, que permite a los clientes recorrer el comedor y la terraza y ver el ambiente del restaurante antes de reservar mesa.',
     tourUrl: 'https://delphinamadrid.360tourx.com',
     thumbnail: '/delphina.png',
   },

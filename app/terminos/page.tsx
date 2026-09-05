@@ -50,7 +50,23 @@ export default function TerminosPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">3. Responsabilidad y modificaciones</h2>
+            <h2 className="text-xl font-bold text-white mb-3">3. Hosting del tour en tu web</h2>
+            <p>
+              El servicio opcional de hosting del tour tiene un precio de 19,99 € e incluye el alojamiento
+              del tour virtual durante un año, con certificado SSL y enlace seguro HTTPS.
+            </p>
+            <p className="mt-3">
+              Es un pago único que se abona junto con la reserva del tour. No es una suscripción: no se
+              renueva automáticamente ni se realiza ningún cargo posterior en la tarjeta del cliente.
+            </p>
+            <p className="mt-3">
+              Transcurrido ese año, el cliente que desee mantener el alojamiento puede solicitarlo
+              escribiendo a hola@360tourx.com.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-white mb-3">4. Responsabilidad y modificaciones</h2>
             <p>
               360TourX no se hace responsable de pérdidas o daños derivados del uso del sitio web o de los
               servicios, excepto en los casos exigidos por la ley.
