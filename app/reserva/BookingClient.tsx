@@ -50,7 +50,7 @@ const webAddon = {
   title: 'Hosting del tour en tu web',
   price: 19.99,
   priceId: 'price_web_addon',
-  description: 'Sube tu tour a tu web con SSL wildcard incluido. +19,99€/año',
+  description: 'Sube tu tour a tu web con SSL wildcard incluido. +19,99€/año — el primer año se abona con la reserva.',
 }
 
 const availableDates = () => {

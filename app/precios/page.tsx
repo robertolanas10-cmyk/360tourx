@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle, Globe } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Planes y Precios',
   description:
-    'Precios transparentes para tours virtuales 360° en Madrid. Desde 290€ con entrega en 48h. Opción de hosting del tour en tu web por 19,99€/año.',
+    'Precios transparentes para tours virtuales 360° en Madrid. Desde 290€ con entrega en 48h. Opción de hosting del tour en tu web por 19,99€ al año.',
 }
 
 const mainPlans = [
@@ -60,7 +60,7 @@ const addOns = [
     membershipPrice: '19,99',
     period: 'año',
     description:
-      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo.',
+      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo. El primer año se abona con la reserva; la renovación no es automática.',
     features: ['Hosting del tour para web', 'Certificado SSL wildcard', 'Enlace seguro HTTPS'],
     href: '/reserva?servicio=100m2&addon=web',
   },
@@ -70,7 +70,7 @@ const addOns = [
     membershipPrice: '19,99',
     period: 'año',
     description:
-      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo.',
+      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo. El primer año se abona con la reserva; la renovación no es automática.',
     features: ['Hosting del tour para web', 'Certificado SSL wildcard', 'Enlace seguro HTTPS'],
     href: '/reserva?servicio=200m2&addon=web',
   },
@@ -80,7 +80,7 @@ const addOns = [
     membershipPrice: '19,99',
     period: 'año',
     description:
-      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo.',
+      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo. El primer año se abona con la reserva; la renovación no es automática.',
     features: ['Hosting del tour para web', 'Certificado SSL wildcard', 'Enlace seguro HTTPS'],
     href: '/reserva?servicio=300m2&addon=web',
   },

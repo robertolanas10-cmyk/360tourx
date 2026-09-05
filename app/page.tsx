@@ -281,7 +281,7 @@ export default function HomePage() {
               </div>
               <p className="text-slate-400 text-sm">
                 Sube tu tour virtual a tu página web con hosting seguro y certificado SSL wildcard
-                incluido.
+                incluido. El primer año se abona con la reserva; la renovación no es automática.
               </p>
             </div>
             <div className="flex items-center gap-4 shrink-0">
@@ -396,7 +396,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             {[
               {
-                name: 'A Locos',
+                name: 'Años Locos',
                 type: 'Bar & Restaurante',
                 url: 'https://alocos.360tourx.com',
                 tag: 'Hostelería',
@@ -404,10 +404,10 @@ export default function HomePage() {
               },
               {
                 name: 'Delphina Madrid',
-                type: 'Hotel & Alojamiento',
+                type: 'Restaurante & Terraza',
                 url: 'https://delphinamadrid.360tourx.com',
-                tag: 'Hotel',
-                thumbnail: 'https://delphinamadrid.360tourx.com/socialThumbnail.jpg',
+                tag: 'Restaurante',
+                thumbnail: '/delphina.jpg',
               },
               {
                 name: 'Copatlife Madrid',

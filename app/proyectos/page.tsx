@@ -16,20 +16,20 @@ const projects = [
     location: 'Madrid',
     category: 'Hostelería',
     description:
-      'Tour virtual completo del restaurante A Locos, mostrando su ambiente, decoración y espacios de forma inmersiva para captar clientes antes de su visita.',
+      'Tour virtual completo del restaurante Años Locos, mostrando su ambiente, decoración y espacios de forma inmersiva para captar clientes antes de su visita.',
     tourUrl: 'https://alocos.360tourx.com',
     thumbnail: 'https://alocos.360tourx.com/socialThumbnail.jpg',
   },
   {
     id: 2,
     title: 'Delphina Madrid',
-    subtitle: 'Hotel & Alojamiento',
+    subtitle: 'Restaurante & Terraza',
     location: 'Madrid',
     category: 'Hostelería',
     description:
-      'Recorrido virtual por las instalaciones de Delphina Madrid, permitiendo a futuros huéspedes explorar habitaciones, zonas comunes y servicios antes de reservar.',
+      'Recorrido virtual por Delphina Madrid, que permite a los clientes recorrer el comedor y la terraza y ver el ambiente del restaurante antes de reservar mesa.',
     tourUrl: 'https://delphinamadrid.360tourx.com',
-    thumbnail: '/delphina.png',
+    thumbnail: '/delphina.jpg',
   },
   {
     id: 3,
