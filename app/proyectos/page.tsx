@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const projects = [
   {
     id: 1,
-    title: 'Anos Locos',
+    title: 'Años Locos',
     subtitle: 'Bar & Restaurante',
     location: 'Madrid',
     category: 'Hostelería',
