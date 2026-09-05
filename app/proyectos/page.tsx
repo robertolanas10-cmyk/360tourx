@@ -29,7 +29,7 @@ const projects = [
     description:
       'Recorrido virtual por Delphina Madrid, que permite a los clientes recorrer el comedor y la terraza y ver el ambiente del restaurante antes de reservar mesa.',
     tourUrl: 'https://delphinamadrid.360tourx.com',
-    thumbnail: '/delphina.png',
+    thumbnail: '/delphina.jpg',
   },
   {
     id: 3,

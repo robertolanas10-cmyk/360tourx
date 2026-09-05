@@ -281,13 +281,13 @@ export default function HomePage() {
               </div>
               <p className="text-slate-400 text-sm">
                 Sube tu tour virtual a tu página web con hosting seguro y certificado SSL wildcard
-                incluido. Pago único que cubre el primer año, sin renovación automática.
+                incluido. El primer año se abona con la reserva; la renovación no es automática.
               </p>
             </div>
             <div className="flex items-center gap-4 shrink-0">
               <div className="text-right">
                 <span className="text-2xl font-bold text-white">19,99€</span>
-                <span className="text-slate-500 text-sm block">primer año</span>
+                <span className="text-slate-500 text-sm block">/ año</span>
               </div>
               <Link href="/precios" className="btn-outline text-sm">
                 Ver planes
@@ -407,7 +407,7 @@ export default function HomePage() {
                 type: 'Restaurante & Terraza',
                 url: 'https://delphinamadrid.360tourx.com',
                 tag: 'Restaurante',
-                thumbnail: 'https://delphinamadrid.360tourx.com/socialThumbnail.jpg',
+                thumbnail: '/delphina.jpg',
               },
               {
                 name: 'Copatlife Madrid',
