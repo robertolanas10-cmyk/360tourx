@@ -16,7 +16,7 @@ const projects = [
     location: 'Madrid',
     category: 'Hostelería',
     description:
-      'Tour virtual completo del restaurante A Locos, mostrando su ambiente, decoración y espacios de forma inmersiva para captar clientes antes de su visita.',
+      'Tour virtual completo del restaurante Años Locos, mostrando su ambiente, decoración y espacios de forma inmersiva para captar clientes antes de su visita.',
     tourUrl: 'https://alocos.360tourx.com',
     thumbnail: 'https://alocos.360tourx.com/socialThumbnail.jpg',
   },

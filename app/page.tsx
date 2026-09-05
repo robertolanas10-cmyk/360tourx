@@ -396,7 +396,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             {[
               {
-                name: 'A Locos',
+                name: 'Años Locos',
                 type: 'Bar & Restaurante',
                 url: 'https://alocos.360tourx.com',
                 tag: 'Hostelería',
