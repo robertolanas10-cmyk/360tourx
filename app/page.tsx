@@ -166,12 +166,6 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-600">
-          <span className="text-xs">Scroll</span>
-          <div className="w-0.5 h-8 bg-gradient-to-b from-slate-600 to-transparent" />
-        </div>
       </section>
 
       {/* Ticker / marquee */}
