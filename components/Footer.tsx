@@ -162,7 +162,14 @@ export default function Footer() {
           <p className="text-slate-500 text-sm">© 2026 360TourX. Todos los derechos reservados.</p>
           <div className="flex items-center gap-2 text-slate-500 text-xs">
             <span>Pagos seguros con</span>
-            <span className="text-violet-400 font-semibold">Stripe</span>
+            <a
+              href="https://stripe.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-violet-400 font-semibold hover:text-violet-300"
+            >
+              Stripe
+            </a>
           </div>
         </div>
       </div>
