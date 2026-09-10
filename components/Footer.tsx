@@ -163,8 +163,6 @@ export default function Footer() {
           <div className="flex items-center gap-2 text-slate-500 text-xs">
             <span>Pagos seguros con</span>
             <span className="text-violet-400 font-semibold">Stripe</span>
-            <span>&</span>
-            <span className="text-blue-400 font-semibold">PayPal</span>
           </div>
         </div>
       </div>
