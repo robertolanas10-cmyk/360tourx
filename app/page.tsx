@@ -76,7 +76,7 @@ const services = [
 ]
 
 const stats = [
-  { value: '+200', label: 'Tours realizados' },
+  { value: '+257', label: 'Tours realizados' },
   { value: '72h', label: 'Tiempo de entrega' },
   { value: '4.9★', label: 'Valoración media' },
   { value: '100%', label: 'Satisfacción garantizada' },
