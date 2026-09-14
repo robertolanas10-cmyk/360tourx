@@ -18,7 +18,7 @@ const advantages = [
   {
     icon: Star,
     title: 'Precios exclusivos',
-    description: 'Tarifas especiales por volumen para agencias con múltiples propiedades mensuales.',
+    description: 'Tarifas por volumen desde 135 € por vivienda, calculadas con tu actividad real.',
   },
   {
     icon: Shield,
@@ -38,7 +38,43 @@ const advantages = [
   {
     icon: CheckCircle,
     title: 'Pago seguro',
-    description: 'Portal de pagos encriptado. Acepta tarjeta, Apple Pay, Google Pay y PayPal.',
+    description: 'Portal de pagos encriptado. Acepta tarjeta, Apple Pay y Google Pay.',
+  },
+]
+
+// Tarifas por volumen para agencias (precio por vivienda, + IVA).
+const tiers = [
+  { name: 'Start', range: '1–4 viviendas/mes', price: '210', popular: false },
+  { name: 'Pro', range: '5–19 viviendas/mes', price: '165', popular: true },
+  { name: 'Business', range: '20–49 viviendas/mes', price: '135', popular: false },
+]
+
+const tierFeatures = [
+  'Tour virtual 360° profesional',
+  'Entrega en menos de 72 h desde la visita',
+  'Alojamiento incluido hasta 6 meses',
+]
+
+const rules = [
+  {
+    title: 'Tu tramo sale de tu actividad real',
+    description:
+      'La tarifa de cada mes se calcula con las viviendas que hicimos contigo el mes anterior. El primer mes aplicamos el tramo del volumen que nos indiques.',
+  },
+  {
+    title: 'Inmuebles de hasta 120 m²',
+    description:
+      'Los precios son para viviendas de hasta 120 m². Por encima, se suman 100 € por cada 100 m² adicionales o fracción.',
+  },
+  {
+    title: 'Entrega en menos de 72 h desde la visita',
+    description:
+      'El plazo cuenta desde el día en que fotografiamos el inmueble. Las visitas se agendan de lunes a sábado según disponibilidad.',
+  },
+  {
+    title: 'Alojamiento mientras el inmueble esté publicado',
+    description:
+      'El tour queda alojado sin coste mientras la vivienda esté anunciada, hasta 6 meses. Si quieres mantenerlo más tiempo, son 19,99 € al año por tour.',
   },
 ]
 
@@ -68,8 +104,8 @@ export default function InmobiliariasPage() {
                   Agenda una llamada gratuita
                   <ArrowRight size={18} />
                 </a>
-                <a href="tel:+34644857326" className="btn-outline text-base px-8">
-                  Llámanos ahora
+                <a href="#tarifas" className="btn-outline text-base px-8">
+                  Ver tarifas
                 </a>
               </div>
             </div>
@@ -80,7 +116,7 @@ export default function InmobiliariasPage() {
                 { label: 'Enfoque', value: 'Visibilidad real de cada inmueble' },
                 { label: 'Entrega', value: 'Tour listo en menos de 72h' },
                 { label: 'Seguridad', value: 'Confianza inmediata con tus clientes' },
-                { label: 'Precios', value: 'Mejor precio del mercado' },
+                { label: 'Precios', value: 'Desde 135 € por vivienda' },
                 { label: 'Profesionalidad', value: 'Estándares de calidad premium' },
                 { label: 'Pagos', value: 'Portal de pagos encriptado' },
               ].map((item) => (
@@ -89,6 +125,92 @@ export default function InmobiliariasPage() {
                     {item.label}
                   </div>
                   <div className="text-sm text-slate-300 leading-snug">{item.value}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Tarifas por volumen */}
+      <section id="tarifas" className="py-20 scroll-mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-white mb-4">
+              Tarifas para <span className="gradient-text">agencias</span>
+            </h2>
+            <p className="text-slate-400 max-w-xl mx-auto">
+              Cuantas más viviendas nos confíes, menos pagas por cada una. Precio por vivienda, + IVA.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {tiers.map((tier) => (
+              <div
+                key={tier.name}
+                className={`card p-7 flex flex-col relative hover:-translate-y-1 transition-all ${
+                  tier.popular ? 'border-violet-500/50 glow' : ''
+                }`}
+              >
+                {tier.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="bg-violet-600 text-black text-xs font-bold px-3 py-1 rounded-full">
+                      MÁS ELEGIDO
+                    </span>
+                  </div>
+                )}
+                <h3 className="font-bold text-white text-xl mb-1">{tier.name}</h3>
+                <p className="text-slate-400 text-sm mb-5">{tier.range}</p>
+                <div className="mb-6">
+                  <span className="text-5xl font-black text-white">{tier.price}</span>
+                  <span className="text-slate-400 text-lg ml-1">€</span>
+                  <span className="text-slate-500 text-sm block mt-1">por vivienda + IVA</span>
+                </div>
+                <ul className="space-y-3 flex-1 mb-8">
+                  {tierFeatures.map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-slate-300">
+                      <CheckCircle size={15} className="text-violet-500 shrink-0 mt-0.5" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <a href="#contacto" className={tier.popular ? 'btn-primary' : 'btn-outline'}>
+                  Empezar con {tier.name}
+                  <ArrowRight size={16} />
+                </a>
+              </div>
+            ))}
+
+            {/* A medida */}
+            <div className="card p-7 flex flex-col border-dashed">
+              <h3 className="font-bold text-white text-xl mb-1">A medida</h3>
+              <p className="text-slate-400 text-sm mb-5">50 o más viviendas/mes</p>
+              <div className="mb-6">
+                <span className="text-3xl font-black text-white">Consultar</span>
+                <span className="text-slate-500 text-sm block mt-1">tarifa y agenda dedicadas</span>
+              </div>
+              <p className="text-slate-400 text-sm leading-relaxed flex-1 mb-8">
+                Para redes de oficinas y agencias con mucho volumen. Organizamos contigo un calendario
+                de visitas para cumplir los plazos.
+              </p>
+              <a href="#contacto" className="btn-outline">
+                Hablemos
+                <ArrowRight size={16} />
+              </a>
+            </div>
+          </div>
+
+          {/* Reglas */}
+          <div className="mt-12 card p-8">
+            <h3 className="font-bold text-white text-xl mb-6">Cómo funcionan las tarifas</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
+              {rules.map((rule) => (
+                <div key={rule.title} className="flex gap-3">
+                  <CheckCircle size={18} className="text-violet-400 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-white mb-1">{rule.title}</h4>
+                    <p className="text-slate-400 text-sm leading-relaxed">{rule.description}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -129,8 +251,8 @@ export default function InmobiliariasPage() {
                 ¿Te gusta lo que ves?
               </h2>
               <p className="text-slate-400 mb-8 leading-relaxed">
-                Contáctanos para conocer nuestra oferta especial para agencias inmobiliarias. Te
-                responderemos en menos de 24 horas.
+                Cuéntanos cuántas viviendas movéis al mes y te confirmamos tu tramo. Te responderemos
+                en menos de 24 horas.
               </p>
               <div className="space-y-4">
                 <a
