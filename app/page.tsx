@@ -12,6 +12,7 @@ import {
   Phone,
   Mail,
   Building2,
+  Eye,
 } from 'lucide-react'
 
 const services = [
@@ -76,10 +77,10 @@ const services = [
 ]
 
 const stats = [
-  { value: '+98', label: 'Tours realizados' },
-  { value: '72h', label: 'Tiempo de entrega' },
-  { value: '4.8', label: 'Valoración media' },
-  { value: '+57.488', label: 'Visitas generadas a clientes' },
+  { value: '+98', label: 'Tours realizados', icon: Camera },
+  { value: '72h', label: 'Tiempo de entrega', icon: Clock },
+  { value: '4.8', label: 'Valoración media', icon: Star },
+  { value: '+57.488', label: 'Visitas generadas a clientes', icon: Eye },
 ]
 
 const whyUs = [
@@ -160,7 +161,10 @@ export default function HomePage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center sm:text-left">
-                  <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
+                    <stat.icon size={20} className="text-violet-400" />
+                    <div className="text-3xl font-bold text-white">{stat.value}</div>
+                  </div>
                   <div className="text-sm text-slate-500">{stat.label}</div>
                 </div>
               ))}
