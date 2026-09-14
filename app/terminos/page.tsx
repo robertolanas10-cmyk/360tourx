@@ -52,16 +52,23 @@ export default function TerminosPage() {
           <section>
             <h2 className="text-xl font-bold text-white mb-3">3. Hosting del tour en tu web</h2>
             <p>
-              El servicio opcional de hosting del tour tiene un precio de 19,99 € al año e incluye el alojamiento
+              El servicio opcional de hosting del tour tiene un precio de 32,99 € al año e incluye el alojamiento
               del tour virtual, con certificado SSL y enlace seguro HTTPS.
             </p>
             <p className="mt-3">
-              El primer año se abona junto con la reserva del tour. La renovación no es automática: no se
-              realiza ningún cargo posterior en la tarjeta del cliente sin su consentimiento expreso.
+              El primer año se abona junto con la reserva del tour. Al contratarlo, el cliente acepta que el
+              servicio se renueve automáticamente cada año en la fecha de aniversario de la reserva, con cargo a
+              la misma tarjeta utilizada en el pago.
             </p>
             <p className="mt-3">
-              Para renovar el alojamiento al llegar el vencimiento, el cliente puede solicitarlo
-              escribiendo a hola@360tourx.com.
+              El cliente puede cancelar la renovación en cualquier momento antes de la fecha de renovación
+              escribiendo a hola@360tourx.com. Tras la cancelación, o si el cobro de la renovación no puede
+              realizarse, el tour se mantiene alojado hasta el final del periodo ya pagado y después deja de
+              estar disponible.
+            </p>
+            <p className="mt-3">
+              Cualquier cambio en el precio del hosting se comunicará al cliente con antelación suficiente a su
+              siguiente renovación.
             </p>
           </section>
 

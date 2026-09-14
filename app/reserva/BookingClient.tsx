@@ -48,9 +48,9 @@ const services = [
 const webAddon = {
   id: 'web',
   title: 'Hosting del tour en tu web',
-  price: 19.99,
+  price: 32.99,
   priceId: 'price_web_addon',
-  description: 'Sube tu tour a tu web con SSL wildcard incluido. +19,99€/año — el primer año se abona con la reserva.',
+  description: 'Sube tu tour a tu web con SSL wildcard incluido. El primer año se abona con la reserva y después se renueva automáticamente cada año. Cancela cuando quieras.',
 }
 
 const availableDates = () => {
@@ -278,7 +278,7 @@ export default function BookingClient() {
                   </div>
                   <div>
                     <div className="font-semibold text-white text-sm">{webAddon.title}</div>
-                    <div className="text-violet-400 font-bold">+{webAddon.price}€/año</div>
+                    <div className="text-violet-400 font-bold">+{webAddon.price.toFixed(2).replace('.', ',')}€/año</div>
                     <div className="text-slate-500 text-xs mt-1">{webAddon.description}</div>
                   </div>
                 </div>
@@ -347,7 +347,7 @@ export default function BookingClient() {
               <div className="text-sm text-slate-400 mb-1">Resumen:</div>
               <div className="text-white font-semibold">{selectedService.title}</div>
               {withWebAddon && (
-                <div className="text-slate-400 text-sm">+ Hosting web (19,99€/año)</div>
+                <div className="text-slate-400 text-sm">+ Hosting web (32,99€/año)</div>
               )}
               {selectedDate && selectedTime && (
                 <div className="text-slate-500 text-xs mt-1">
@@ -432,8 +432,8 @@ export default function BookingClient() {
             </div>
             {withWebAddon && (
               <div className="flex justify-between text-sm">
-                <span className="text-slate-400">Hosting web (anual)</span>
-                <span className="text-white font-medium">{webAddon.price}€</span>
+                <span className="text-slate-400">Hosting web (primer año)</span>
+                <span className="text-white font-medium">{webAddon.price.toFixed(2).replace('.', ',')}€</span>
               </div>
             )}
             <div className="flex justify-between text-sm">
@@ -453,6 +453,19 @@ export default function BookingClient() {
                 <span className="text-white">Total (+ IVA)</span>
                 <span className="text-violet-400 text-lg">{totalPrice.toFixed(2).replace('.', ',')}€</span>
               </div>
+            )}
+            {withWebAddon && (
+              <p className="text-xs text-slate-400 leading-relaxed border-t border-[#1e1e2e] pt-3">
+                El hosting se renueva automáticamente por {webAddon.price.toFixed(2).replace('.', ',')}€ al año
+                a partir del{' '}
+                {new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toLocaleDateString('es-ES', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+                , con la misma tarjeta. Puedes cancelarlo en cualquier momento antes de esa fecha escribiendo a
+                hola@360tourx.com.
+              </p>
             )}
           </div>
 

@@ -16,11 +16,18 @@ CREATE TABLE "reservas" (
     "metodoPago" TEXT,
     "stripeId" TEXT,
     "paypalId" TEXT,
+    "stripeCustomerId" TEXT,
+    "stripeSubscriptionId" TEXT,
+    "hostingEstado" TEXT,
+    "hostingVenceEl" TIMESTAMP(3),
     "estadoTour" TEXT NOT NULL DEFAULT 'pendiente',
     "notas" TEXT,
 
     CONSTRAINT "reservas_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "reservas_stripeSubscriptionId_key" ON "reservas"("stripeSubscriptionId");
 
 -- CreateTable
 CREATE TABLE "contactos" (

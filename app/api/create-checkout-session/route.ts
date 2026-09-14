@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { prisma } from '@/lib/prisma'
+import { HOSTING_ANUAL_CENTIMOS } from '@/lib/hosting'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
@@ -10,7 +11,7 @@ const PRICE_MAP: Record<string, number> = {
   '100m2': 29000,
   '200m2': 39000,
   '300m2': 49000,
-  'web_addon': 1999,
+  'web_addon': HOSTING_ANUAL_CENTIMOS,
 }
 
 const SERVICE_NAMES: Record<string, string> = {
@@ -135,6 +136,8 @@ export async function POST(req: NextRequest) {
       customer: customer.id,
       receipt_email: customerEmail,
       automatic_payment_methods: { enabled: true },
+      // Con hosting se guarda la tarjeta: el webhook crea la suscripción que renueva cada año.
+      ...(withAddon ? { setup_future_usage: 'off_session' as const } : {}),
       metadata: {
         reservaId: reserva.id.toString(),
         serviceId,
@@ -152,7 +155,10 @@ export async function POST(req: NextRequest) {
     // Actualizar reserva con el ID de Stripe
     await prisma.reserva.update({
       where: { id: reserva.id },
-      data: { stripeId: paymentIntent.id },
+      data: {
+        stripeId: paymentIntent.id,
+        ...(withAddon ? { stripeCustomerId: customer.id } : {}),
+      },
     })
 
     return NextResponse.json({

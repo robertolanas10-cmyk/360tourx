@@ -74,7 +74,7 @@ const rules = [
   {
     title: 'Alojamiento mientras el inmueble esté publicado',
     description:
-      'El tour queda alojado sin coste mientras la vivienda esté anunciada, hasta 6 meses. Si quieres mantenerlo más tiempo, son 19,99 € al año por tour.',
+      'El tour queda alojado sin coste mientras la vivienda esté anunciada, hasta 6 meses. Si quieres mantenerlo más tiempo, son 32,99 € al año por tour.',
   },
 ]
 

@@ -280,12 +280,12 @@ export default function HomePage() {
               </div>
               <p className="text-slate-400 text-sm">
                 Sube tu tour virtual a tu página web con hosting seguro y certificado SSL wildcard
-                incluido. El primer año se abona con la reserva; la renovación no es automática.
+                incluido. El primer año se abona con la reserva y se renueva automáticamente; cancela cuando quieras.
               </p>
             </div>
             <div className="flex items-center gap-4 shrink-0">
               <div className="text-right">
-                <span className="text-2xl font-bold text-white">19,99€</span>
+                <span className="text-2xl font-bold text-white">32,99€</span>
                 <span className="text-slate-500 text-sm block">/ año</span>
               </div>
               <Link href="/precios" className="btn-outline text-sm">

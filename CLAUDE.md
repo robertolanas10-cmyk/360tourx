@@ -100,12 +100,16 @@ repetir cadenas largas de Tailwind:
 | Tour hasta 200m² | 390 € |
 | Tour hasta 300m² | 490 € |
 | Tour +300m² | Presupuesto personalizado (no se paga online) |
-| Add-on hosting web | 19,99 €/año |
+| Add-on hosting web | 32,99 €/año (se renueva solo, ver abajo) |
 
 ⚠️ Los precios están **duplicados**: en `services` de
 [app/reserva/BookingClient.tsx](app/reserva/BookingClient.tsx#L12) (euros) y en `PRICE_MAP` de
 [app/api/create-checkout-session/route.ts](app/api/create-checkout-session/route.ts#L9) (céntimos).
 Si cambias uno, cambia el otro. Moneda: **EUR**, precios mostrados "+ IVA".
+
+El precio del **hosting** vive en `HOSTING_ANUAL_CENTIMOS` de [lib/hosting.ts](lib/hosting.ts) (lo usa
+`PRICE_MAP`), pero también está escrito a mano en `BookingClient`, la home, `/precios`,
+`/inmobiliarias` y `/terminos`.
 
 ## Flujo de reserva/pago
 
@@ -115,10 +119,22 @@ Si cambias uno, cambia el otro. Moneda: **EUR**, precios mostrados "+ IVA".
 3. `CheckoutForm` confirma el pago con Stripe Elements.
 4. El caso **+300m²** no paga: envía una solicitud de reunión vía `POST /api/contact`.
 
+### Hosting anual (suscripción)
+
+Si la reserva lleva hosting, el PaymentIntent cobra tour + primer año y se crea con
+`setup_future_usage: 'off_session'` para guardar la tarjeta. Al llegar `payment_intent.succeeded`,
+el webhook crea una **suscripción de Stripe** ([lib/hosting.ts](lib/hosting.ts)) con el ciclo anclado a
+dentro de un año y sin prorrateo: no cobra nada al crearse y renueva sola cada aniversario. El
+Price anual se busca/crea por `lookup_key` (`hosting_tour_anual_<céntimos>`), así que no hay que
+crearlo a mano en el Dashboard. Estado en la `Reserva`: `stripeSubscriptionId`, `hostingEstado`
+(`activo` | `cancela_al_vencer` | `impago` | `cancelado`) y `hostingVenceEl`. En `/admin/reservas`
+el filtro **"Hosting a retirar"** lista los cancelados/impagados: hay que sacar su tour del wildcard.
+
 ## Gotchas / estado real del proyecto
 
 - **✅ Webhook de Stripe funcionando.** [app/api/stripe-webhook/route.ts](app/api/stripe-webhook/route.ts)
-  escucha `payment_intent.succeeded` / `payment_intent.payment_failed` y actualiza la `Reserva`
+  escucha `payment_intent.succeeded` / `payment_intent.payment_failed` (reservas) y
+  `customer.subscription.updated` / `customer.subscription.deleted` (hosting), y actualiza la `Reserva`
   por `metadata.reservaId` (a `completado` / `fallido`). Necesita `STRIPE_WEBHOOK_SECRET`.
   Probado en local end-to-end con claves de test + Stripe CLI (`stripe listen --forward-to
   localhost:3000/api/stripe-webhook`). **En producción** hay que crear el endpoint en el Dashboard

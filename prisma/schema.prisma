@@ -36,6 +36,12 @@ model Reserva {
   stripeId       String?  // PaymentIntent ID de Stripe
   paypalId       String?
 
+  // Hosting anual del tour (suscripción de Stripe)
+  stripeCustomerId     String?
+  stripeSubscriptionId String?   @unique
+  hostingEstado        String?   // 'activo' | 'cancela_al_vencer' | 'impago' | 'cancelado'
+  hostingVenceEl       DateTime?
+
   // Tour
   estadoTour     String   @default("pendiente") // 'pendiente' | 'en_proceso' | 'completado' | 'entregado'
   notas          String?  @db.Text

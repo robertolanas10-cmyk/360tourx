@@ -40,3 +40,24 @@ export function TourBadge({ estado }: { estado: string }) {
     </span>
   )
 }
+
+export function HostingBadge({ estado }: { estado: string | null }) {
+  if (!estado) return null
+  const map: Record<string, string> = {
+    activo: 'bg-green-500/15 text-green-400 border-green-500/30',
+    cancela_al_vencer: 'bg-yellow-500/15 text-yellow-400 border-yellow-500/30',
+    impago: 'bg-red-500/15 text-red-400 border-red-500/30',
+    cancelado: 'bg-slate-700/50 text-slate-400 border-slate-600',
+  }
+  const label: Record<string, string> = {
+    activo: 'Hosting activo',
+    cancela_al_vencer: 'Cancela al vencer',
+    impago: 'Hosting impagado',
+    cancelado: 'Hosting cancelado',
+  }
+  return (
+    <span className={`text-xs px-2 py-0.5 rounded-full border ${map[estado] || 'bg-slate-700 text-slate-400'}`}>
+      {label[estado] || estado}
+    </span>
+  )
+}

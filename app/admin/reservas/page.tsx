@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { PagoBadge, TourBadge } from '../badges'
+import { HostingBadge, PagoBadge, TourBadge } from '../badges'
 
 interface Reserva {
   id: number
@@ -19,6 +19,8 @@ interface Reserva {
   estadoTour: string
   metodoPago: string | null
   stripeId: string | null
+  hostingEstado: string | null
+  hostingVenceEl: string | null
   notas: string | null
 }
 
@@ -46,6 +48,7 @@ export default function ReservasPage() {
     if (filtro === 'pagadas') return r.estadoPago === 'completado'
     if (filtro === 'pendientes_pago') return r.estadoPago === 'pendiente'
     if (filtro === 'por_entregar') return r.estadoTour !== 'entregado' && r.estadoPago === 'completado'
+    if (filtro === 'hosting_retirar') return r.hostingEstado === 'cancelado' || r.hostingEstado === 'impago'
     return true
   })
 
@@ -91,6 +94,7 @@ export default function ReservasPage() {
           { key: 'pagadas', label: 'Pagadas' },
           { key: 'pendientes_pago', label: 'Pago pendiente' },
           { key: 'por_entregar', label: 'Por entregar' },
+          { key: 'hosting_retirar', label: 'Hosting a retirar' },
         ].map((f) => (
           <button
             key={f.key}
@@ -138,7 +142,10 @@ export default function ReservasPage() {
                       <div className="text-white font-medium">{r.nombre}</div>
                       <div className="text-slate-500 text-xs">{r.email}</div>
                     </td>
-                    <td className="px-4 py-3 text-slate-300 text-xs">{r.servicioNombre}</td>
+                    <td className="px-4 py-3 text-slate-300 text-xs">
+                      {r.servicioNombre}
+                      {r.hostingEstado && <div className="mt-1"><HostingBadge estado={r.hostingEstado} /></div>}
+                    </td>
                     <td className="px-4 py-3 text-slate-300">{r.precio ? `${Number(r.precio).toFixed(2)}€` : '—'}</td>
                     <td className="px-4 py-3"><PagoBadge estado={r.estadoPago} /></td>
                     <td className="px-4 py-3"><TourBadge estado={r.estadoTour} /></td>
@@ -166,7 +173,23 @@ export default function ReservasPage() {
               {selected.telefono && <div><span className="text-slate-500">Tel:</span> <span className="text-slate-300">{selected.telefono}</span></div>}
               <div><span className="text-slate-500">Dirección:</span> <span className="text-slate-300">{selected.direccion}</span></div>
               <div><span className="text-slate-500">Servicio:</span> <span className="text-slate-300">{selected.servicioNombre}</span></div>
-              {selected.conHostingWeb && <div className="text-violet-400 text-xs">+ Hosting web</div>}
+              {selected.conHostingWeb && (
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-500">Hosting:</span>
+                    {selected.hostingEstado ? <HostingBadge estado={selected.hostingEstado} /> : <span className="text-slate-400 text-xs">sin suscripción</span>}
+                  </div>
+                  {selected.hostingVenceEl && (
+                    <div className="text-xs text-slate-400">
+                      {selected.hostingEstado === 'activo' ? 'Renueva el' : 'Pagado hasta el'}{' '}
+                      {new Date(selected.hostingVenceEl).toLocaleDateString('es-ES')}
+                    </div>
+                  )}
+                  {(selected.hostingEstado === 'cancelado' || selected.hostingEstado === 'impago') && (
+                    <div className="text-xs text-red-400">Sacar el tour del wildcard</div>
+                  )}
+                </div>
+              )}
               <div><span className="text-slate-500">Precio:</span> <span className="text-white font-semibold">{selected.precio ? `${Number(selected.precio).toFixed(2)}€` : '—'}</span></div>
               {selected.fechaVisita && (
                 <div><span className="text-slate-500">Visita:</span> <span className="text-slate-300">{new Date(selected.fechaVisita).toLocaleDateString('es-ES')} {selected.horaVisita}</span></div>

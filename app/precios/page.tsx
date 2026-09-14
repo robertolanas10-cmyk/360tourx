@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle, Globe } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Planes y Precios',
   description:
-    'Precios transparentes para tours virtuales 360° en Madrid. Desde 290€ con entrega en menos de 72h. Opción de hosting del tour en tu web por 19,99€ al año.',
+    'Precios transparentes para tours virtuales 360° en Madrid. Desde 290€ con entrega en menos de 72h. Opción de hosting del tour en tu web por 32,99€ al año.',
 }
 
 const mainPlans = [
@@ -57,30 +57,30 @@ const addOns = [
   {
     title: 'Tour Virtual 100m² + Membresía Web',
     tourPrice: '290',
-    membershipPrice: '19,99',
+    membershipPrice: '32,99',
     period: 'año',
     description:
-      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo. El primer año se abona con la reserva; la renovación no es automática.',
+      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo. El primer año se abona con la reserva y se renueva automáticamente cada año.',
     features: ['Hosting del tour para web', 'Certificado SSL wildcard', 'Enlace seguro HTTPS'],
     href: '/reserva?servicio=100m2&addon=web',
   },
   {
     title: 'Tour Virtual 200m² + Membresía Web',
     tourPrice: '390',
-    membershipPrice: '19,99',
+    membershipPrice: '32,99',
     period: 'año',
     description:
-      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo. El primer año se abona con la reserva; la renovación no es automática.',
+      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo. El primer año se abona con la reserva y se renueva automáticamente cada año.',
     features: ['Hosting del tour para web', 'Certificado SSL wildcard', 'Enlace seguro HTTPS'],
     href: '/reserva?servicio=200m2&addon=web',
   },
   {
     title: 'Tour Virtual 300m² + Membresía Web',
     tourPrice: '490',
-    membershipPrice: '19,99',
+    membershipPrice: '32,99',
     period: 'año',
     description:
-      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo. El primer año se abona con la reserva; la renovación no es automática.',
+      'Sube tu tour virtual a tu página web de forma totalmente segura con el link que te adjuntaremos en tu correo. El primer año se abona con la reserva y se renueva automáticamente cada año.',
     features: ['Hosting del tour para web', 'Certificado SSL wildcard', 'Enlace seguro HTTPS'],
     href: '/reserva?servicio=300m2&addon=web',
   },
