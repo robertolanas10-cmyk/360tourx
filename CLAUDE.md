@@ -123,8 +123,9 @@ Si cambias uno, cambia el otro. Moneda: **EUR**, precios mostrados "+ IVA".
   Probado en local end-to-end con claves de test + Stripe CLI (`stripe listen --forward-to
   localhost:3000/api/stripe-webhook`). **En producción** hay que crear el endpoint en el Dashboard
   de Stripe (→ `https://www.360tourx.com/api/stripe-webhook`) para obtener el `whsec_` definitivo.
-- **⚠️ El panel `/admin` no tiene autenticación** (ni las rutas `/api/admin/*`). Cualquiera puede
-  entrar. No hay `middleware.ts`. Añadir protección antes de exponer en producción.
+- **✅ El panel `/admin` (y `/api/admin/*`) está protegido** por [middleware.ts](middleware.ts) con
+  autenticación HTTP Basic. Credenciales en `ADMIN_USER` / `ADMIN_PASSWORD` (`.env.local`). Sin
+  `ADMIN_PASSWORD` configurada, el panel se cierra por defecto (503) en vez de quedar abierto.
 - **PayPal es un placeholder**: abre una URL legacy de PayPal en otra pestaña y no registra el pago.
   Falta integrarlo de verdad con `@paypal/react-paypal-js` (ya está instalado).
 - Emails y Stripe se **degradan silenciosamente** si faltan credenciales (comprueban `env` antes
