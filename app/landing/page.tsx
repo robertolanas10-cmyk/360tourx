@@ -86,8 +86,8 @@ export default function LandingPage() {
                 <div className="lp-stat-label">Más interacción online</div>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div className="lp-stat-num">48h</div>
-                <div className="lp-stat-label">Entrega en 48 horas</div>
+                <div className="lp-stat-num">72h</div>
+                <div className="lp-stat-label">Entrega en menos de 72 horas</div>
               </div>
               <div style={{ textAlign: 'center' }}>
                 <div className="lp-stat-num">100%</div>
@@ -124,7 +124,7 @@ export default function LandingPage() {
                 { icon: '📱', title: 'Disponible 24/7', desc: 'Tu espacio está abierto para los clientes a cualquier hora, desde cualquier dispositivo: móvil, tablet u ordenador.' },
                 { icon: '🎯', title: 'Mayor conversión', desc: 'Los tours virtuales aumentan el tiempo que los usuarios pasan en tu ficha de Google y generan más contactos que las fotos estáticas.' },
                 { icon: '🗺️', title: 'Integración con Google Maps', desc: 'El tour queda integrado directamente en tu ficha de Google Business, visible para miles de personas que buscan negocios como el tuyo.' },
-                { icon: '🚀', title: 'Entrega exprés', desc: 'Tu tour virtual listo en 48 horas desde la sesión fotográfica. Calidad profesional sin tiempos de espera interminables.' },
+                { icon: '🚀', title: 'Entrega exprés', desc: 'Tu tour virtual listo en menos de 72 horas desde la sesión fotográfica. Calidad profesional sin tiempos de espera interminables.' },
               ].map(b => (
                 <div key={b.title} className="lp-benefit-card">
                   <div className="lp-benefit-icon">{b.icon}</div>
@@ -148,7 +148,7 @@ export default function LandingPage() {
                   {[
                     { n: '1', title: 'Contacta y reserva', desc: 'Rellena el formulario o llámanos. Te damos una cita en el horario que mejor te convenga.' },
                     { n: '2', title: 'Sesión fotográfica 360°', desc: 'Nuestro equipo va a tu espacio con cámaras profesionales y captura cada rincón en alta resolución.' },
-                    { n: '3', title: 'Publicación en 48h', desc: 'Procesamos el tour y lo publicamos en Google Maps y te entregamos el enlace para compartir donde quieras.' },
+                    { n: '3', title: 'Publicación en menos de 72h', desc: 'Procesamos el tour y lo publicamos en Google Maps y te entregamos el enlace para compartir donde quieras.' },
                   ].map(s => (
                     <div key={s.n} className="lp-how-step">
                       <div className="lp-step-num">{s.n}</div>
@@ -184,7 +184,7 @@ export default function LandingPage() {
                 <div className="lp-price-amount">290<span>€</span></div>
                 <p className="lp-price-desc">Perfecto para locales pequeños, apartamentos y pisos</p>
                 <ul className="lp-price-features">
-                  <li>Tour virtual 360° interactivo</li><li>Publicación en Google Maps</li><li>Enlace para compartir</li><li>Entrega en 48h</li>
+                  <li>Tour virtual 360° interactivo</li><li>Publicación en Google Maps</li><li>Enlace para compartir</li><li>Entrega en menos de 72h</li>
                 </ul>
               </div>
               <div className="lp-price-card featured">
@@ -193,7 +193,7 @@ export default function LandingPage() {
                 <div className="lp-price-amount">390<span>€</span></div>
                 <p className="lp-price-desc">Ideal para restaurantes, tiendas y viviendas medianas</p>
                 <ul className="lp-price-features">
-                  <li>Tour virtual 360° interactivo</li><li>Publicación en Google Maps</li><li>Enlace para compartir</li><li>Entrega en 72h</li><li>Más puntos de captura</li>
+                  <li>Tour virtual 360° interactivo</li><li>Publicación en Google Maps</li><li>Enlace para compartir</li><li>Entrega en menos de 72h</li><li>Más puntos de captura</li>
                 </ul>
               </div>
               <div className="lp-price-card">
@@ -201,7 +201,7 @@ export default function LandingPage() {
                 <div className="lp-price-amount">490<span>€</span></div>
                 <p className="lp-price-desc">Hoteles, gimnasios, clínicas y grandes inmuebles</p>
                 <ul className="lp-price-features">
-                  <li>Tour virtual 360° interactivo</li><li>Publicación en Google Maps</li><li>Enlace para compartir</li><li>Entrega en 72h</li><li>Cobertura completa</li>
+                  <li>Tour virtual 360° interactivo</li><li>Publicación en Google Maps</li><li>Enlace para compartir</li><li>Entrega en menos de 72h</li><li>Cobertura completa</li>
                 </ul>
               </div>
               <div className="lp-price-card">
@@ -209,7 +209,7 @@ export default function LandingPage() {
                 <div className="lp-price-amount" style={{ fontSize: 26, lineHeight: 1.4 }}>Tarifa<br />personalizada</div>
                 <p className="lp-price-desc">Proyectos especiales: naves, resorts, campus, edificios</p>
                 <ul className="lp-price-features">
-                  <li>Presupuesto a medida</li><li>Gestión de proyecto dedicada</li><li>Múltiples sesiones si necesario</li><li>SLA prioritario</li>
+                  <li>Presupuesto a medida</li><li>Gestión de proyecto dedicada</li><li>Múltiples sesiones si necesario</li><li>Plazo de entrega personalizado</li>
                 </ul>
               </div>
             </div>

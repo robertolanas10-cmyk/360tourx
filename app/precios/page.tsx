@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle, Globe } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Planes y Precios',
   description:
-    'Precios transparentes para tours virtuales 360° en Madrid. Desde 290€ con entrega en 48h. Opción de hosting del tour en tu web por 19,99€ al año.',
+    'Precios transparentes para tours virtuales 360° en Madrid. Desde 290€ con entrega en menos de 72h. Opción de hosting del tour en tu web por 19,99€ al año.',
 }
 
 const mainPlans = [
@@ -15,7 +15,7 @@ const mainPlans = [
     features: [
       'Tour 360° interactivo',
       'Tour Google Maps',
-      'Entrega en 48h',
+      'Entrega en menos de 72h',
       'Enlace compartible',
       'Soporte por email',
     ],
@@ -28,7 +28,7 @@ const mainPlans = [
     features: [
       'Tour 360° interactivo',
       'Tour Google Maps',
-      'Entrega en 72h',
+      'Entrega en menos de 72h',
       'Enlace compartible',
       'Plano de planta',
       'Soporte prioritario',
@@ -42,7 +42,7 @@ const mainPlans = [
     features: [
       'Tour 360° interactivo',
       'Tour Google Maps',
-      'Entrega en 72h',
+      'Entrega en menos de 72h',
       'Enlace compartible',
       'Plano de planta',
       'Etiquetas informativas',

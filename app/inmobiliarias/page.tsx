@@ -13,7 +13,7 @@ const advantages = [
   {
     icon: Zap,
     title: 'Entrega prioritaria',
-    description: 'Tus tours se procesan con prioridad. Resultado en menos de 24 horas, siempre.',
+    description: 'Tus tours se procesan con prioridad. Resultado en menos de 72 horas, siempre.',
   },
   {
     icon: Star,
@@ -61,7 +61,7 @@ export default function InmobiliariasPage() {
               </h1>
               <p className="text-xl text-slate-400 leading-relaxed mb-8">
                 En 360TourX elevamos la experiencia de cualquier espacio al siguiente nivel, ofreciendo
-                una visibilidad realista y certera de todo tipo de inmuebles. Entrega en 48-72 horas garantizada.
+                una visibilidad realista y certera de todo tipo de inmuebles. Entrega en menos de 72 horas garantizada.
               </p>
               <div className="flex flex-wrap gap-4">
                 <a href="#contacto" className="btn-primary text-base px-8">
@@ -78,7 +78,7 @@ export default function InmobiliariasPage() {
             <div className="grid grid-cols-2 gap-4">
               {[
                 { label: 'Enfoque', value: 'Visibilidad real de cada inmueble' },
-                { label: 'Entrega', value: 'Tour listo en 48-72h' },
+                { label: 'Entrega', value: 'Tour listo en menos de 72h' },
                 { label: 'Seguridad', value: 'Confianza inmediata con tus clientes' },
                 { label: 'Precios', value: 'Mejor precio del mercado' },
                 { label: 'Profesionalidad', value: 'Estándares de calidad premium' },

@@ -43,7 +43,7 @@ const benefits = [
     icon: Zap,
     title: 'Resultado inmediato',
     description:
-      'Entrega en 48-72 horas. Tu tour virtual listo para compartir con clientes en menos de 3 días.',
+      'Entrega en menos de 72 horas. Tu tour virtual listo para compartir con clientes en menos de 3 días.',
   },
 ]
 
@@ -105,7 +105,7 @@ export default function QueEsUnTourVirtualPage() {
                   'Etiquetas informativas personalizables',
                   'Integración con Google Maps Street View',
                   'Enlace compartible y embebible en tu web',
-                  'Entrega en 48-72 horas',
+                  'Entrega en menos de 72 horas',
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3 text-slate-300 text-sm">
                     <CheckCircle size={16} className="text-violet-500 shrink-0 mt-0.5" />

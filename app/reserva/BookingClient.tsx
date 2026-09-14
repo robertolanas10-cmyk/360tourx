@@ -16,7 +16,7 @@ const services = [
     price: 290,
     priceId: 'price_100m2', // Replace with actual Stripe Price ID
     description: 'Estudios, pisos pequeños, locales y oficinas compactas.',
-    features: ['Tour 360° interactivo', 'Tour Google Maps', 'Entrega en 48h'],
+    features: ['Tour 360° interactivo', 'Tour Google Maps', 'Entrega en menos de 72h'],
   },
   {
     id: '200m2',
@@ -24,7 +24,7 @@ const services = [
     price: 390,
     priceId: 'price_200m2',
     description: 'Pisos amplios, locales comerciales y espacios de trabajo.',
-    features: ['Tour 360° interactivo', 'Tour Google Maps', 'Entrega en 72h', 'Plano de planta'],
+    features: ['Tour 360° interactivo', 'Tour Google Maps', 'Entrega en menos de 72h', 'Plano de planta'],
     popular: true,
   },
   {
@@ -33,7 +33,7 @@ const services = [
     price: 490,
     priceId: 'price_300m2',
     description: 'Viviendas de lujo, hoteles boutique y grandes establecimientos.',
-    features: ['Tour 360° interactivo', 'Tour Google Maps', 'Entrega en 72h', 'Plano de planta', 'Etiquetas'],
+    features: ['Tour 360° interactivo', 'Tour Google Maps', 'Entrega en menos de 72h', 'Plano de planta', 'Etiquetas'],
   },
   {
     id: '300m2plus',
@@ -41,7 +41,7 @@ const services = [
     price: null,
     priceId: null,
     description: 'Para grandes superficies. Contacta para presupuesto personalizado.',
-    features: ['Tour 360° premium', 'Visita previa incluida', 'Soporte prioritario'],
+    features: ['Tour 360° premium', 'Visita previa incluida', 'Soporte prioritario', 'Plazo de entrega personalizado'],
   },
 ]
 

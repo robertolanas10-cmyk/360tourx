@@ -20,7 +20,7 @@ const services = [
     price: '290',
     currency: '€',
     description: 'Perfecto para estudios, pisos pequeños, locales y oficinas compactas.',
-    features: ['Tour 360° interactivo', 'Tour Google Maps', 'Entrega en 48h', 'Enlace compartible'],
+    features: ['Tour 360° interactivo', 'Tour Google Maps', 'Entrega en menos de 72h', 'Enlace compartible'],
     href: '/reserva?servicio=100m2',
     popular: false,
   },
@@ -32,7 +32,7 @@ const services = [
     features: [
       'Tour 360° interactivo',
       'Tour Google Maps',
-      'Entrega en 72h',
+      'Entrega en menos de 72h',
       'Enlace compartible',
       'Plano de planta',
     ],
@@ -47,7 +47,7 @@ const services = [
     features: [
       'Tour 360° interactivo',
       'Tour Google Maps',
-      'Entrega en 72h',
+      'Entrega en menos de 72h',
       'Enlace compartible',
       'Plano de planta',
       'Etiquetas informativas',
@@ -68,6 +68,7 @@ const services = [
       'Plano de planta',
       'Etiquetas informativas',
       'Soporte prioritario',
+      'Plazo de entrega personalizado',
     ],
     href: '/reserva?servicio=300m2plus',
     popular: false,
@@ -76,7 +77,7 @@ const services = [
 
 const stats = [
   { value: '+200', label: 'Tours realizados' },
-  { value: '48h', label: 'Tiempo de entrega' },
+  { value: '72h', label: 'Tiempo de entrega' },
   { value: '4.9★', label: 'Valoración media' },
   { value: '100%', label: 'Satisfacción garantizada' },
 ]
@@ -84,9 +85,9 @@ const stats = [
 const whyUs = [
   {
     icon: Clock,
-    title: 'Entrega en 48-72h',
+    title: 'Entrega en menos de 72h',
     description:
-      'Tour virtual completamente ensamblado en 48h para espacios hasta 100m² y 72h para los demás.',
+      'Tour virtual completamente ensamblado en menos de 72 horas. Para proyectos +300m², plazo personalizado.',
   },
   {
     icon: Globe,
@@ -142,7 +143,7 @@ export default function HomePage() {
 
             <p className="text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed">
               Transformamos tu inmueble o negocio en una experiencia 360° inmersiva que tus clientes
-              pueden visitar desde cualquier lugar. Entrega en 48-72 horas.
+              pueden visitar desde cualquier lugar. Entrega en menos de 72 horas.
             </p>
 
             <div className="flex flex-wrap gap-4 mb-16">
@@ -367,7 +368,7 @@ export default function HomePage() {
               <div className="card p-6 space-y-3 mt-8">
                 <Clock size={28} className="text-violet-400" />
                 <h4 className="font-bold text-white">Entrega rápida</h4>
-                <p className="text-slate-400 text-sm">Tour completo en tu bandeja en menos de 24 horas.</p>
+                <p className="text-slate-400 text-sm">Tour completo en tu bandeja en menos de 72 horas.</p>
               </div>
             </div>
           </div>

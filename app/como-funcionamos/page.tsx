@@ -5,7 +5,7 @@ import { ArrowRight, Phone, Calendar, Camera, Cpu, Send, CheckCircle } from 'luc
 export const metadata: Metadata = {
   title: 'Cómo Funcionamos',
   description:
-    'Descubre el proceso de 360TourX: desde la reserva hasta la entrega de tu tour virtual en menos de 24 horas.',
+    'Descubre el proceso de 360TourX: desde la reserva hasta la entrega de tu tour virtual en menos de 72 horas.',
 }
 
 const steps = [
@@ -44,9 +44,9 @@ const steps = [
   {
     icon: Send,
     number: '05',
-    title: 'Entregamos en 48-72h',
+    title: 'Entregamos en menos de 72h',
     description:
-      'Recibes el enlace de tu tour virtual completo en 48h (hasta 100m²) o 72h (hasta 300m²) en tu correo electrónico, listo para compartir con clientes, publicar en tu web o subir a Google Maps.',
+      'Recibes el enlace de tu tour virtual completo en menos de 72 horas (hasta 300m²) en tu correo electrónico, listo para compartir con clientes, publicar en tu web o subir a Google Maps. Para proyectos +300m², el plazo se acuerda de forma personalizada.',
     details: ['Enlace único compartible', 'Código de embed para tu web', 'Publicación en Google Maps'],
   },
 ]
@@ -86,7 +86,7 @@ export default function ComoFuncionamosPage() {
           </p>
           <h1 className="section-title mb-6">
             De la reserva al tour en{' '}
-            <span className="gradient-text">menos de 24 horas</span>
+            <span className="gradient-text">menos de 72 horas</span>
           </h1>
           <p className="text-xl text-slate-400 leading-relaxed">
             Un proceso simple, profesional y sin complicaciones. Te acompañamos en cada paso.
@@ -149,7 +149,7 @@ export default function ComoFuncionamosPage() {
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">¿Listo para empezar?</h2>
           <p className="text-slate-400 mb-8">
-            Reserva tu tour virtual ahora mismo y recibe tu enlace en menos de 24 horas.
+            Reserva tu tour virtual ahora mismo y recibe tu enlace en menos de 72 horas.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="/reserva" className="btn-primary text-base px-8">
