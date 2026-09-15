@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import { ArrowRight, CheckCircle, Loader2, Plus, Trash2 } from 'lucide-react'
 import {
   FRANJAS,
+  HOSTING_AGENCIA_ANUAL,
   MAX_INMUEBLES,
   METROS_INCLUIDOS,
   SUPLEMENTO_CADA_M2,
@@ -14,6 +15,7 @@ import {
   type FranjaId,
   type TramoId,
   formatoEuros,
+  formatoEurosCentimos,
   getTramo,
   precioInmueble,
 } from '@/lib/tarifas-agencia'
@@ -50,6 +52,7 @@ export default function SolicitudClient() {
   const siguienteClave = useRef(1)
   const [inmuebles, setInmuebles] = useState<Inmueble[]>(() => [inmuebleVacio(0)])
   const [notas, setNotas] = useState('')
+  const [conHosting, setConHosting] = useState(false)
   const [aceptaTerminos, setAceptaTerminos] = useState(false)
   const [web, setWeb] = useState('') // campo trampa anti-spam
   const [hoy, setHoy] = useState('')
@@ -87,6 +90,7 @@ export default function SolicitudClient() {
           ...agencia,
           tramo: tramoId,
           notas,
+          conHosting,
           aceptaTerminos,
           web,
           inmuebles: inmuebles.map(({ direccion, metros, disponibleDesde, franja }) => ({
@@ -327,10 +331,47 @@ export default function SolicitudClient() {
             </button>
           </section>
 
-          {/* 4. Notas */}
+          {/* 4. Alojamiento */}
           <section className="card p-6 sm:p-8">
             <h2 className="text-xl font-bold text-white mb-2">
-              4. Notas <span className="text-slate-500 font-normal text-base">(opcional)</span>
+              4. Alojamiento de los tours <span className="text-slate-500 font-normal text-base">(opcional)</span>
+            </h2>
+            <p className="text-slate-400 text-sm mb-5">
+              Alojamos tus tours en nuestro servidor con certificado SSL, listos para enlazar desde tus anuncios.
+            </p>
+            <button
+              type="button"
+              onClick={() => setConHosting(!conHosting)}
+              aria-pressed={conHosting}
+              className={`w-full text-left rounded-xl border p-4 transition-all ${
+                conHosting ? 'border-violet-500/60 bg-violet-600/10' : 'border-[#1e1e2e] hover:border-slate-600'
+              }`}
+            >
+              <div className="flex items-start gap-3">
+                <div
+                  className={`w-5 h-5 rounded border-2 mt-0.5 shrink-0 flex items-center justify-center transition-all ${
+                    conHosting ? 'bg-violet-600 border-violet-500' : 'border-slate-600'
+                  }`}
+                >
+                  {conHosting && <CheckCircle size={12} className="text-black" />}
+                </div>
+                <div>
+                  <div className="font-semibold text-white text-sm">Alojar todos mis tours en vuestro servidor</div>
+                  <div className="text-violet-400 font-bold mt-0.5">
+                    +{formatoEurosCentimos(HOSTING_AGENCIA_ANUAL)} al año
+                  </div>
+                  <div className="text-slate-500 text-xs mt-1">
+                    Una sola cuota por todos tus tours, no por cada uno.
+                  </div>
+                </div>
+              </div>
+            </button>
+          </section>
+
+          {/* 5. Notas */}
+          <section className="card p-6 sm:p-8">
+            <h2 className="text-xl font-bold text-white mb-2">
+              5. Notas <span className="text-slate-500 font-normal text-base">(opcional)</span>
             </h2>
             <p className="text-slate-400 text-sm mb-4">
               Llaves, contacto del propietario, zonas que no se deben fotografiar…
@@ -358,6 +399,12 @@ export default function SolicitudClient() {
               <span className="text-slate-400">Inmuebles</span>
               <span className="text-white font-medium">{inmuebles.length}</span>
             </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-slate-400">Alojamiento</span>
+              <span className="text-white font-medium">
+                {conHosting ? `${formatoEurosCentimos(HOSTING_AGENCIA_ANUAL)}/año` : 'No'}
+              </span>
+            </div>
           </div>
 
           <div className="border-t border-[#1e1e2e] pt-4">
@@ -371,7 +418,9 @@ export default function SolicitudClient() {
                   <span className="text-white font-semibold">Estimado</span>
                   <span className="text-violet-400 text-2xl font-bold">{formatoEuros(total)}</span>
                 </div>
-                <p className="text-slate-500 text-xs mt-1 text-right">+ IVA</p>
+                <p className="text-slate-500 text-xs mt-1 text-right">
+                  + IVA{conHosting && ` · alojamiento aparte: ${formatoEurosCentimos(HOSTING_AGENCIA_ANUAL)}/año`}
+                </p>
                 {!todosConPrecio && (
                   <p className="text-slate-500 text-xs mt-3">Indica los m² de cada inmueble para completar el cálculo.</p>
                 )}

@@ -109,6 +109,7 @@ repetir cadenas largas de Tailwind:
 | Tour hasta 300m² | 490 € |
 | Tour +300m² | Presupuesto personalizado (no se paga online) |
 | Add-on hosting web | 32,99 €/año (se renueva solo, ver abajo) |
+| Hosting agencias | 32,99 €/año por **todos** sus tours, desde el primer día (aún no se cobra online) |
 
 ⚠️ Los precios están **duplicados**: en `services` de
 [app/reserva/BookingClient.tsx](app/reserva/BookingClient.tsx#L12) (euros) y en `PRICE_MAP` de
@@ -146,7 +147,9 @@ La agencia deja sus datos una vez y añade hasta 20 inmuebles (dirección, m², 
 [lib/tarifas-agencia.ts](lib/tarifas-agencia.ts) (lo que mande el navegador se ignora), guarda
 `SolicitudAgencia` + `InmuebleSolicitud` y envía dos emails: aviso a `EMAIL_TO` y confirmación a la
 agencia. Tiene un campo trampa oculto (`web`) contra bots. Se gestionan en `/admin/solicitudes`
-(estados en [lib/solicitud-estados.ts](lib/solicitud-estados.ts)). El formulario de contacto del final de
+(estados en [lib/solicitud-estados.ts](lib/solicitud-estados.ts)). La casilla `conHosting` indica que quiere
+alojar todos sus tours (cuota anual única; no se suma a `importeEstimado`).
+El formulario de contacto del final de
 `/inmobiliarias` sigue igual, para dudas generales.
 
 Si cambian los tramos o el suplemento, se cambian solo en `lib/tarifas-agencia.ts`; los textos de las

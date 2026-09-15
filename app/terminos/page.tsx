@@ -70,6 +70,11 @@ export default function TerminosPage() {
               Cualquier cambio en el precio del hosting se comunicará al cliente con antelación suficiente a su
               siguiente renovación.
             </p>
+            <p className="mt-3">
+              Para agencias inmobiliarias, el alojamiento de todos sus tours tiene un precio único de 32,99 € al
+              año desde su contratación, con independencia del número de tours, en las condiciones que se
+              acuerden en su presupuesto.
+            </p>
           </section>
 
           <section>

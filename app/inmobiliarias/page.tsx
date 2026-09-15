@@ -56,7 +56,7 @@ const tiers = TRAMOS.filter((t) => t.precio !== null).map((t) => ({
 const tierFeatures = [
   'Tour virtual 360° profesional',
   'Entrega en menos de 72 h desde la visita',
-  'Alojamiento incluido hasta 6 meses',
+  'Alojamiento opcional de todos tus tours',
 ]
 
 const rules = [
@@ -76,9 +76,9 @@ const rules = [
       'El plazo cuenta desde el día en que fotografiamos el inmueble. Las visitas se agendan de lunes a sábado según disponibilidad.',
   },
   {
-    title: 'Alojamiento mientras el inmueble esté publicado',
+    title: 'Alojamiento de todos tus tours',
     description:
-      'El tour queda alojado sin coste mientras la vivienda esté anunciada, hasta 6 meses. Si quieres mantenerlo más tiempo, son 32,99 € al año por tour.',
+      'Alojamos todos tus tours en nuestro servidor por 32,99 € al año: una sola cuota por todos, no por cada uno. Lo marcas al hacer tu solicitud.',
   },
 ]
 

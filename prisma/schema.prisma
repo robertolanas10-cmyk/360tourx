@@ -77,6 +77,9 @@ model SolicitudAgencia {
   tramo    String // tramo declarado para el primer mes: 'start' | 'pro' | 'business' | 'a_medida'
   notas    String? @db.Text
 
+  // Quiere alojar todos sus tours en nuestro servidor (cuota anual única, no se suma a importeEstimado)
+  conHosting Boolean @default(false)
+
   // null si el tramo es "a medida" (se presupuesta aparte)
   importeEstimado Decimal? @db.Decimal(10, 2)
   estado          String   @default("nueva") // 'nueva' | 'presupuestada' | 'agendada' | 'completada' | 'descartada'

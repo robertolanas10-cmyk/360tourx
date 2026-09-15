@@ -55,6 +55,7 @@ CREATE TABLE "solicitudes_agencia" (
     "telefono" TEXT NOT NULL,
     "tramo" TEXT NOT NULL,
     "notas" TEXT,
+    "conHosting" BOOLEAN NOT NULL DEFAULT false,
     "importeEstimado" DECIMAL(10,2),
     "estado" TEXT NOT NULL DEFAULT 'nueva',
     CONSTRAINT "solicitudes_agencia_pkey" PRIMARY KEY ("id")

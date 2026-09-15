@@ -3,8 +3,10 @@ import { prisma } from '@/lib/prisma'
 import { enviarEmail, escaparHtml } from '@/lib/email'
 import {
   FRANJAS,
+  HOSTING_AGENCIA_ANUAL,
   MAX_INMUEBLES,
   formatoEuros,
+  formatoEurosCentimos,
   getTramo,
   precioInmueble,
 } from '@/lib/tarifas-agencia'
@@ -37,6 +39,7 @@ export async function POST(req: NextRequest) {
   const telefono = texto(body.telefono, 40)
   const notas = texto(body.notas, 2000)
   const tramo = getTramo(texto(body.tramo, 20))
+  const conHosting = body.conHosting === true
 
   if (!agencia || !contacto || !email || !telefono) {
     return NextResponse.json({ error: 'Faltan los datos de la agencia' }, { status: 400 })
@@ -104,6 +107,7 @@ export async function POST(req: NextRequest) {
       telefono,
       tramo: tramo.id,
       notas: notas || null,
+      conHosting,
       importeEstimado,
       inmuebles: { create: inmuebles },
     },
@@ -126,6 +130,9 @@ export async function POST(req: NextRequest) {
         </tr>`
       )
       .join('')
+    const hosting = conHosting
+      ? `Sí: ${formatoEurosCentimos(HOSTING_AGENCIA_ANUAL)} al año por todos los tours`
+      : 'No'
     const tabla = `<table style="border-collapse:collapse;font-size:14px">
       <tr style="text-align:left;background:#f5f3f8">
         <th style="padding:6px 10px">#</th><th style="padding:6px 10px">Dirección</th>
@@ -140,7 +147,8 @@ export async function POST(req: NextRequest) {
       html: `<h2>Nueva solicitud de ${escaparHtml(agencia)}</h2>
         <p><strong>Contacto:</strong> ${escaparHtml(contacto)} · ${escaparHtml(telefono)} · ${escaparHtml(email)}<br>
         <strong>Tramo declarado:</strong> ${tramo.nombre} (${tramo.rango})<br>
-        <strong>Importe estimado:</strong> ${estimado}</p>
+        <strong>Importe estimado:</strong> ${estimado}<br>
+        <strong>Alojamiento de los tours:</strong> ${hosting}</p>
         ${tabla}
         ${notas ? `<p><strong>Notas:</strong><br>${escaparHtml(notas).replace(/\n/g, '<br>')}</p>` : ''}
         <p><a href="${sitio}/admin/solicitudes">Ver en el panel</a></p>`,
@@ -156,6 +164,7 @@ export async function POST(req: NextRequest) {
         ${tabla}
         <p><strong>Importe estimado:</strong> ${estimado}. Es una estimación según tu tramo y los m²
         indicados; te confirmamos el presupuesto definitivo.</p>
+        ${conHosting ? `<p><strong>Alojamiento:</strong> has pedido alojar todos tus tours en nuestro servidor por ${formatoEurosCentimos(HOSTING_AGENCIA_ANUAL)} al año, una sola cuota por todos, no por cada tour.</p>` : ''}
         <p>Un saludo,<br>El equipo de 360TourX · +34 644 85 73 26</p>`,
     })
   } catch (err) {

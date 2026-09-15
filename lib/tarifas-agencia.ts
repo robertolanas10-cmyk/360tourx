@@ -27,6 +27,10 @@ export const SUPLEMENTO_CADA_M2 = 100
 
 export const MAX_INMUEBLES = 20
 
+// Hosting para agencias: una única cuota anual por todos los tours de la agencia (no por cada uno),
+// desde el primer día. De momento no se cobra online: se acuerda en el presupuesto.
+export const HOSTING_AGENCIA_ANUAL = 32.99
+
 export const FRANJAS = [
   { id: 'manana', nombre: 'Mañana' },
   { id: 'tarde', nombre: 'Tarde' },
@@ -44,6 +48,11 @@ export function precioInmueble(tramo: Tramo, metros: number): number | null {
   if (tramo.precio === null) return null
   const exceso = Math.max(0, metros - METROS_INCLUIDOS)
   return tramo.precio + Math.ceil(exceso / SUPLEMENTO_CADA_M2) * SUPLEMENTO_EUROS
+}
+
+// Con céntimos (32,99 €), para importes que no son enteros.
+export function formatoEurosCentimos(importe: number): string {
+  return `${importe.toFixed(2).replace('.', ',')} €`
 }
 
 // Formato manual (1.250 €) en vez de toLocaleString: el servidor y el navegador pueden

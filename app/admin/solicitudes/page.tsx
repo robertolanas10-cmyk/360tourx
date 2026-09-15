@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Mail, Phone, Trash2 } from 'lucide-react'
 import { ESTADOS_SOLICITUD } from '@/lib/solicitud-estados'
-import { FRANJAS, formatoEuros, getTramo } from '@/lib/tarifas-agencia'
+import { FRANJAS, HOSTING_AGENCIA_ANUAL, formatoEuros, formatoEurosCentimos, getTramo } from '@/lib/tarifas-agencia'
 
 interface Inmueble {
   id: number
@@ -23,6 +23,7 @@ interface Solicitud {
   telefono: string
   tramo: string
   notas: string | null
+  conHosting: boolean
   importeEstimado: string | null
   estado: string
   inmuebles: Inmueble[]
@@ -154,6 +155,11 @@ export default function SolicitudesPage() {
                       <div className="text-white font-semibold">
                         {s.importeEstimado === null ? 'A medida' : `${formatoEuros(Number(s.importeEstimado))} + IVA`}
                       </div>
+                      {s.conHosting && (
+                        <div className="text-violet-400 text-xs mt-0.5">
+                          + Alojamiento de todos los tours: {formatoEurosCentimos(HOSTING_AGENCIA_ANUAL)}/año
+                        </div>
+                      )}
                     </div>
                     <select
                       value={s.estado}
