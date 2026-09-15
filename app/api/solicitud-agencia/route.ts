@@ -8,6 +8,7 @@ import {
   formatoEuros,
   formatoEurosCentimos,
   getTramo,
+  maxInmueblesDe,
   precioInmueble,
 } from '@/lib/tarifas-agencia'
 
@@ -61,6 +62,12 @@ export async function POST(req: NextRequest) {
   if (entrada.length < 1 || entrada.length > MAX_INMUEBLES) {
     return NextResponse.json(
       { error: `Añade entre 1 y ${MAX_INMUEBLES} inmuebles` },
+      { status: 400 }
+    )
+  }
+  if (entrada.length > maxInmueblesDe(tramo)) {
+    return NextResponse.json(
+      { error: `El plan ${tramo.nombre} admite hasta ${maxInmueblesDe(tramo)} inmuebles. Si necesitas más, elige un plan superior.` },
       { status: 400 }
     )
   }

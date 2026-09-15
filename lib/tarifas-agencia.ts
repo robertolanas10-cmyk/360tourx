@@ -9,14 +9,16 @@ export interface Tramo {
   rango: string
   // null en "A medida": se presupuesta aparte.
   precio: number | null
+  // Máximo de inmuebles que se pueden pedir con este plan; null = tope general MAX_INMUEBLES.
+  maxInmuebles: number | null
   popular: boolean
 }
 
 export const TRAMOS: Tramo[] = [
-  { id: 'start', nombre: 'Start', rango: '1–4 viviendas/mes', precio: 210, popular: false },
-  { id: 'pro', nombre: 'Pro', rango: '5–19 viviendas/mes', precio: 165, popular: true },
-  { id: 'business', nombre: 'Business', rango: '20–49 viviendas/mes', precio: 135, popular: false },
-  { id: 'a_medida', nombre: 'A medida', rango: '50 o más viviendas/mes', precio: null, popular: false },
+  { id: 'start', nombre: 'Start', rango: '1–4 viviendas/mes', precio: 210, maxInmuebles: 4, popular: false },
+  { id: 'pro', nombre: 'Pro', rango: '5–19 viviendas/mes', precio: 165, maxInmuebles: 19, popular: true },
+  { id: 'business', nombre: 'Business', rango: '20–49 viviendas/mes', precio: 135, maxInmuebles: 49, popular: false },
+  { id: 'a_medida', nombre: 'A medida', rango: '50 o más viviendas/mes', precio: null, maxInmuebles: null, popular: false },
 ]
 
 // Los precios cubren hasta este tamaño; por encima se suma SUPLEMENTO_EUROS por cada
@@ -25,7 +27,12 @@ export const METROS_INCLUIDOS = 120
 export const SUPLEMENTO_EUROS = 100
 export const SUPLEMENTO_CADA_M2 = 100
 
-export const MAX_INMUEBLES = 20
+// Tope de seguridad por solicitud para "A medida" (los demás planes tienen su propio máximo).
+export const MAX_INMUEBLES = 100
+
+export function maxInmueblesDe(tramo: Tramo): number {
+  return tramo.maxInmuebles ?? MAX_INMUEBLES
+}
 
 // Hosting para agencias: una única cuota anual por todos los tours de la agencia (no por cada uno),
 // desde el primer día. De momento no se cobra online: se acuerda en el presupuesto.

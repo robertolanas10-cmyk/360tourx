@@ -7,7 +7,6 @@ import { ArrowRight, CheckCircle, Loader2, Plus, Trash2 } from 'lucide-react'
 import {
   FRANJAS,
   HOSTING_AGENCIA_ANUAL,
-  MAX_INMUEBLES,
   METROS_INCLUIDOS,
   SUPLEMENTO_CADA_M2,
   SUPLEMENTO_EUROS,
@@ -17,6 +16,7 @@ import {
   formatoEuros,
   formatoEurosCentimos,
   getTramo,
+  maxInmueblesDe,
   precioInmueble,
 } from '@/lib/tarifas-agencia'
 
@@ -63,6 +63,9 @@ export default function SolicitudClient() {
   useEffect(() => setHoy(hoyLocal()), [])
 
   const tramo = getTramo(tramoId)!
+  const maxInmuebles = maxInmueblesDe(tramo)
+  const enElMaximo = inmuebles.length >= maxInmuebles
+  const planSiguiente = TRAMOS[TRAMOS.findIndex((t) => t.id === tramo.id) + 1]
   const precios = inmuebles.map((inm) => {
     const metros = parseInt(inm.metros, 10)
     return Number.isInteger(metros) && metros >= 10 ? precioInmueble(tramo, metros) : null
@@ -192,13 +195,16 @@ export default function SolicitudClient() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {TRAMOS.map((t) => {
                 const activo = t.id === tramoId
+                // No se deja bajar a un plan que no admite los inmuebles ya añadidos (no se borra nada sin avisar).
+                const noCaben = inmuebles.length > maxInmueblesDe(t)
                 return (
                   <button
                     key={t.id}
                     type="button"
                     onClick={() => setTramoId(t.id)}
+                    disabled={noCaben}
                     aria-pressed={activo}
-                    className={`text-left rounded-xl border p-4 transition-all ${
+                    className={`text-left rounded-xl border p-4 transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
                       activo
                         ? 'border-violet-500/60 bg-violet-600/10'
                         : 'border-[#1e1e2e] hover:border-slate-600'
@@ -214,6 +220,11 @@ export default function SolicitudClient() {
                       {t.rango}
                       {t.precio !== null && ' · por vivienda, IVA incluido'}
                     </div>
+                    {noCaben && (
+                      <div className="text-amber-400/90 text-xs mt-1.5">
+                        Admite hasta {maxInmueblesDe(t)}: quita inmuebles para elegirlo
+                      </div>
+                    )}
                   </button>
                 )
               })}
@@ -222,7 +233,12 @@ export default function SolicitudClient() {
 
           {/* 3. Inmuebles */}
           <section className="card p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-white mb-2">3. Inmuebles</h2>
+            <div className="flex items-baseline justify-between gap-4 mb-2">
+              <h2 className="text-xl font-bold text-white">3. Inmuebles</h2>
+              <span className={`text-sm font-medium ${enElMaximo ? 'text-amber-400' : 'text-slate-500'}`}>
+                {inmuebles.length} de {maxInmuebles}
+              </span>
+            </div>
             <p className="text-slate-400 text-sm mb-6">
               Uno por cada vivienda que quieras fotografiar. Te proponemos la cita según su disponibilidad.
             </p>
@@ -323,12 +339,25 @@ export default function SolicitudClient() {
             <button
               type="button"
               onClick={() => setInmuebles((prev) => [...prev, inmuebleVacio(siguienteClave.current++)])}
-              disabled={inmuebles.length >= MAX_INMUEBLES}
+              disabled={enElMaximo}
               className="btn-ghost mt-4 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Plus size={16} />
-              {inmuebles.length >= MAX_INMUEBLES ? `Máximo ${MAX_INMUEBLES} por solicitud` : 'Añadir otro inmueble'}
+              {enElMaximo ? `Máximo ${maxInmuebles} con el plan ${tramo.nombre}` : 'Añadir otro inmueble'}
             </button>
+            {enElMaximo && planSiguiente && (
+              <p className="text-slate-400 text-sm mt-2">
+                ¿Necesitas más?{' '}
+                <button
+                  type="button"
+                  onClick={() => setTramoId(planSiguiente.id)}
+                  className="text-violet-400 hover:text-violet-300 underline underline-offset-2"
+                >
+                  Cambia al plan {planSiguiente.nombre}
+                </button>
+                {planSiguiente.maxInmuebles !== null && `, que admite hasta ${planSiguiente.maxInmuebles}`}.
+              </p>
+            )}
           </section>
 
           {/* 4. Alojamiento */}
@@ -397,7 +426,9 @@ export default function SolicitudClient() {
             </div>
             <div className="flex justify-between gap-4">
               <span className="text-slate-400">Inmuebles</span>
-              <span className="text-white font-medium">{inmuebles.length}</span>
+              <span className="text-white font-medium">
+                {inmuebles.length} de {maxInmuebles}
+              </span>
             </div>
             <div className="flex justify-between gap-4">
               <span className="text-slate-400">Alojamiento</span>

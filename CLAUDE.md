@@ -142,7 +142,9 @@ el filtro **"Hosting a retirar"** lista los cancelados/impagados: hay que sacar 
 ### Solicitudes de agencias
 
 Los botones de cada plan de `/inmobiliarias` llevan a `/inmobiliarias/solicitud?tramo=<start|pro|business|a_medida>`.
-La agencia deja sus datos una vez y añade hasta 20 inmuebles (dirección, m², disponible desde, franja).
+La agencia deja sus datos una vez y añade inmuebles (dirección, m², disponible desde, franja) hasta el
+máximo de su plan (`maxInmuebles`: Start 4, Pro 19, Business 49, A medida 100). No deja cambiar a un plan
+menor si ya hay más inmuebles de los que admite, y la API también rechaza pasarse.
 `POST /api/solicitud-agencia` valida todo y **recalcula los precios en el servidor** con
 [lib/tarifas-agencia.ts](lib/tarifas-agencia.ts) (lo que mande el navegador se ignora), guarda
 `SolicitudAgencia` + `InmuebleSolicitud` y envía dos emails: aviso a `EMAIL_TO` y confirmación a la
