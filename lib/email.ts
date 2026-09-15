@@ -22,7 +22,8 @@ export async function enviarEmail(opciones: {
   })
 
   await transporter.sendMail({
-    from: `"360TourX" <${process.env.EMAIL_USER}>`,
+    // En servicios de envío (Brevo, Resend…) el usuario SMTP no es una dirección: el remitente va en EMAIL_FROM.
+    from: `"360TourX" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
     to: opciones.para,
     subject: opciones.asunto,
     html: opciones.html,

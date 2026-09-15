@@ -54,7 +54,7 @@ Enviado desde el formulario de contacto de 360tourx.com
       `.trim()
 
       await transporter.sendMail({
-        from: `"360TourX Web" <${process.env.EMAIL_USER}>`,
+        from: `"360TourX Web" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
         to: process.env.EMAIL_TO || 'hola@360tourx.com',
         replyTo: email,
         subject: `[360TourX] Nuevo contacto de ${nombre}${empresa ? ` (${empresa})` : ''}`,
@@ -62,7 +62,7 @@ Enviado desde el formulario de contacto de 360tourx.com
       })
 
       await transporter.sendMail({
-        from: `"360TourX" <${process.env.EMAIL_USER}>`,
+        from: `"360TourX" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
         to: email,
         subject: 'Hemos recibido tu mensaje — 360TourX',
         text: `
