@@ -80,11 +80,37 @@ export async function POST(req: NextRequest) {
         // así se guarda siempre el estado más reciente aunque los eventos lleguen desordenados.
         const { id } = event.data.object as Stripe.Subscription
         const sub = await stripe.subscriptions.retrieve(id)
-        await prisma.reserva.updateMany({
-          where: { stripeSubscriptionId: sub.id },
+        const hosting = {
+          hostingEstado: estadoHosting(sub),
+          hostingVenceEl: new Date(sub.current_period_end * 1000),
+        }
+        // La suscripción puede ser de una reserva online o del alojamiento de una agencia.
+        await prisma.reserva.updateMany({ where: { stripeSubscriptionId: sub.id }, data: hosting })
+        await prisma.solicitudAgencia.updateMany({ where: { stripeSubscriptionId: sub.id }, data: hosting })
+        break
+      }
+      // Una agencia ha pagado su enlace de pago (tours y, si lo contrató, el primer año de alojamiento).
+      case 'checkout.session.completed': {
+        const { id } = event.data.object as Stripe.Checkout.Session
+        const session = await stripe.checkout.sessions.retrieve(id)
+        const solicitudId = parseInt(session.metadata?.solicitudId ?? '', 10)
+        if (!solicitudId || session.payment_status !== 'paid') break
+
+        const subId = typeof session.subscription === 'string' ? session.subscription : session.subscription?.id
+        const sub = subId ? await stripe.subscriptions.retrieve(subId) : null
+        const customerId = typeof session.customer === 'string' ? session.customer : session.customer?.id
+
+        // Solo la primera vez: si Stripe reenvía el evento no se sobrescribe nada.
+        await prisma.solicitudAgencia.updateMany({
+          where: { id: solicitudId, estadoPago: { not: 'pagada' } },
           data: {
-            hostingEstado: estadoHosting(sub),
-            hostingVenceEl: new Date(sub.current_period_end * 1000),
+            estadoPago: 'pagada',
+            pagadaEl: new Date(),
+            stripeCheckoutId: session.id,
+            stripeCustomerId: customerId ?? null,
+            stripeSubscriptionId: sub?.id ?? null,
+            hostingEstado: sub ? estadoHosting(sub) : null,
+            hostingVenceEl: sub ? new Date(sub.current_period_end * 1000) : null,
           },
         })
         break

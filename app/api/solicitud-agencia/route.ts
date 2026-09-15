@@ -118,7 +118,7 @@ export async function POST(req: NextRequest) {
   try {
     const sitio = process.env.NEXT_PUBLIC_SITE_URL || 'https://360tourx.com'
     const estimado =
-      importeEstimado === null ? 'A medida (presupuesto aparte)' : `${formatoEuros(importeEstimado)} + IVA`
+      importeEstimado === null ? 'A medida (presupuesto aparte)' : `${formatoEuros(importeEstimado)} (IVA incluido)`
     const filas = inmuebles
       .map(
         (inm, i) => `<tr>

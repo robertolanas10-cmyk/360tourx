@@ -1,4 +1,4 @@
-// Tarifas por volumen para agencias inmobiliarias (precio por vivienda, + IVA).
+// Tarifas por volumen para agencias inmobiliarias (precio por vivienda, IVA incluido).
 // Las usan la página /inmobiliarias, el formulario de solicitud y la API que lo guarda.
 
 export type TramoId = 'start' | 'pro' | 'business' | 'a_medida'

@@ -155,11 +155,23 @@ El formulario de contacto del final de
 Si cambian los tramos o el suplemento, se cambian solo en `lib/tarifas-agencia.ts`; los textos de las
 reglas de `/inmobiliarias` sí están escritos a mano.
 
+**Cobro de agencias** ([lib/cobro-agencia.ts](lib/cobro-agencia.ts)). Importes de agencias con **IVA incluido**
+(se cobran tal cual). En `/admin/solicitudes` se fija el importe final de los tours y si lleva alojamiento
+(32,99 €/año por todos sus tours) y se genera un enlace propio `/pago/<tokenPago>` que no caduca (si se
+cambia el importe, el enlace es el mismo). Al pulsar "Pagar", `POST /api/pago-agencia/[token]` crea en ese
+momento la Checkout Session de Stripe (las de Stripe caducan en 24 h) y cierra la anterior si seguía abierta.
+Con alojamiento es `mode: 'subscription'`: los tours van como línea de pago único en la primera factura y
+solo el alojamiento se renueva cada año. Sin alojamiento es `mode: 'payment'`. El webhook
+`checkout.session.completed` marca `estadoPago: 'pagada'` y guarda la suscripción; las renovaciones y
+cancelaciones llegan por `customer.subscription.*` igual que las reservas. El filtro "Hosting a retirar"
+del panel lista las canceladas/impagadas.
+
 ## Gotchas / estado real del proyecto
 
 - **✅ Webhook de Stripe funcionando.** [app/api/stripe-webhook/route.ts](app/api/stripe-webhook/route.ts)
   escucha `payment_intent.succeeded` / `payment_intent.payment_failed` (reservas) y
-  `customer.subscription.updated` / `customer.subscription.deleted` (hosting), y actualiza la `Reserva`
+  `customer.subscription.updated` / `customer.subscription.deleted` (hosting de reservas y agencias) y
+  `checkout.session.completed` (pago de agencias), y actualiza la `Reserva` o la `SolicitudAgencia`
   por `metadata.reservaId` (a `completado` / `fallido`). Necesita `STRIPE_WEBHOOK_SECRET`.
   Probado en local end-to-end con claves de test + Stripe CLI (`stripe listen --forward-to
   localhost:3000/api/stripe-webhook`). **En producción** hay que crear el endpoint en el Dashboard

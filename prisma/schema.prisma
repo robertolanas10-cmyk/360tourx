@@ -84,6 +84,17 @@ model SolicitudAgencia {
   importeEstimado Decimal? @db.Decimal(10, 2)
   estado          String   @default("nueva") // 'nueva' | 'presupuestada' | 'agendada' | 'completada' | 'descartada'
 
+  // Cobro con el enlace de pago generado en /admin/solicitudes. Importes con IVA incluido.
+  importeTours         Decimal?  @db.Decimal(10, 2) // importe final acordado de los tours
+  tokenPago            String?   @unique // parte secreta del enlace /pago/<token>
+  estadoPago           String    @default("sin_enlace") // 'sin_enlace' | 'pendiente' | 'pagada'
+  pagadaEl             DateTime?
+  stripeCheckoutId     String?
+  stripeCustomerId     String?
+  stripeSubscriptionId String?   @unique
+  hostingEstado        String? // 'activo' | 'cancela_al_vencer' | 'impago' | 'cancelado'
+  hostingVenceEl       DateTime?
+
   inmuebles InmuebleSolicitud[]
 
   @@map("solicitudes_agencia")

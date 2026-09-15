@@ -58,6 +58,15 @@ CREATE TABLE "solicitudes_agencia" (
     "conHosting" BOOLEAN NOT NULL DEFAULT false,
     "importeEstimado" DECIMAL(10,2),
     "estado" TEXT NOT NULL DEFAULT 'nueva',
+    "importeTours" DECIMAL(10,2),
+    "tokenPago" TEXT,
+    "estadoPago" TEXT NOT NULL DEFAULT 'sin_enlace',
+    "pagadaEl" TIMESTAMP(3),
+    "stripeCheckoutId" TEXT,
+    "stripeCustomerId" TEXT,
+    "stripeSubscriptionId" TEXT,
+    "hostingEstado" TEXT,
+    "hostingVenceEl" TIMESTAMP(3),
     CONSTRAINT "solicitudes_agencia_pkey" PRIMARY KEY ("id")
 );
 
@@ -78,3 +87,9 @@ CREATE INDEX "inmuebles_solicitud_solicitudId_idx" ON "inmuebles_solicitud"("sol
 
 -- AddForeignKey
 ALTER TABLE "inmuebles_solicitud" ADD CONSTRAINT "inmuebles_solicitud_solicitudId_fkey" FOREIGN KEY ("solicitudId") REFERENCES "solicitudes_agencia"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- CreateIndex
+CREATE UNIQUE INDEX "solicitudes_agencia_tokenPago_key" ON "solicitudes_agencia"("tokenPago");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "solicitudes_agencia_stripeSubscriptionId_key" ON "solicitudes_agencia"("stripeSubscriptionId");

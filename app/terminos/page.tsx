@@ -72,8 +72,11 @@ export default function TerminosPage() {
             </p>
             <p className="mt-3">
               Para agencias inmobiliarias, el alojamiento de todos sus tours tiene un precio único de 32,99 € al
-              año desde su contratación, con independencia del número de tours, en las condiciones que se
-              acuerden en su presupuesto.
+              año, IVA incluido, con independencia del número de tours. Se abona junto con el pago del
+              presupuesto y se renueva automáticamente cada año en la misma fecha, con cargo a la misma tarjeta,
+              hasta que la agencia lo cancele escribiendo a hola@360tourx.com. Tras la cancelación, o si el cobro
+              de la renovación no puede realizarse, los tours se mantienen alojados hasta el final del periodo ya
+              pagado y después dejan de estar disponibles.
             </p>
           </section>
 

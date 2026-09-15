@@ -8,10 +8,13 @@ export const HOSTING_ANUAL_CENTIMOS = 3299
 // y las suscripciones ya existentes siguen renovándose con el suyo.
 const HOSTING_LOOKUP_KEY = `hosting_tour_anual_${HOSTING_ANUAL_CENTIMOS}`
 
-// Devuelve el Price recurrente anual del hosting, creándolo en Stripe la primera vez.
-export async function getHostingPriceId(stripe: Stripe): Promise<string> {
+// Devuelve un Price recurrente anual por su lookup_key, creándolo en Stripe la primera vez.
+export async function getPrecioAnualId(
+  stripe: Stripe,
+  opciones: { lookupKey: string; centimos: number; nombre: string }
+): Promise<string> {
   const existentes = await stripe.prices.list({
-    lookup_keys: [HOSTING_LOOKUP_KEY],
+    lookup_keys: [opciones.lookupKey],
     active: true,
     limit: 1,
   })
@@ -19,12 +22,21 @@ export async function getHostingPriceId(stripe: Stripe): Promise<string> {
 
   const price = await stripe.prices.create({
     currency: 'eur',
-    unit_amount: HOSTING_ANUAL_CENTIMOS,
+    unit_amount: opciones.centimos,
     recurring: { interval: 'year' },
-    lookup_key: HOSTING_LOOKUP_KEY,
-    product_data: { name: 'Hosting del tour virtual (anual)' },
+    lookup_key: opciones.lookupKey,
+    product_data: { name: opciones.nombre },
   })
   return price.id
+}
+
+// Price recurrente anual del hosting de las reservas online.
+export function getHostingPriceId(stripe: Stripe): Promise<string> {
+  return getPrecioAnualId(stripe, {
+    lookupKey: HOSTING_LOOKUP_KEY,
+    centimos: HOSTING_ANUAL_CENTIMOS,
+    nombre: 'Hosting del tour virtual (anual)',
+  })
 }
 
 // Traduce el estado de la suscripción de Stripe al estado de hosting que se ve en el panel.

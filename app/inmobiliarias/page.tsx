@@ -43,7 +43,7 @@ const advantages = [
   },
 ]
 
-// Tarifas por volumen para agencias (precio por vivienda, + IVA). Salen de lib/tarifas-agencia.ts,
+// Tarifas por volumen para agencias (precio por vivienda, IVA incluido). Salen de lib/tarifas-agencia.ts,
 // que también usan el formulario de solicitud y su API. "A medida" tiene su propia tarjeta.
 const tiers = TRAMOS.filter((t) => t.precio !== null).map((t) => ({
   id: t.id,
@@ -78,7 +78,7 @@ const rules = [
   {
     title: 'Alojamiento de todos tus tours',
     description:
-      'Alojamos todos tus tours en nuestro servidor por 32,99 € al año: una sola cuota por todos, no por cada uno. Lo marcas al hacer tu solicitud.',
+      'Alojamos todos tus tours en nuestro servidor por 32,99 € al año, IVA incluido: una sola cuota por todos, no por cada uno. Se renueva sola cada año y puedes cancelarla cuando quieras.',
   },
 ]
 
@@ -144,7 +144,7 @@ export default function InmobiliariasPage() {
               Tarifas para <span className="gradient-text">agencias</span>
             </h2>
             <p className="text-slate-400 max-w-xl mx-auto">
-              Cuantas más viviendas nos confíes, menos pagas por cada una. Precio por vivienda, + IVA.
+              Cuantas más viviendas nos confíes, menos pagas por cada una. Precio por vivienda, IVA incluido.
             </p>
           </div>
 
@@ -168,7 +168,7 @@ export default function InmobiliariasPage() {
                 <div className="mb-6">
                   <span className="text-5xl font-black text-white">{tier.price}</span>
                   <span className="text-slate-400 text-lg ml-1">€</span>
-                  <span className="text-slate-500 text-sm block mt-1">por vivienda + IVA</span>
+                  <span className="text-slate-500 text-sm block mt-1">por vivienda, IVA incluido</span>
                 </div>
                 <ul className="space-y-3 flex-1 mb-8">
                   {tierFeatures.map((f) => (

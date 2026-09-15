@@ -212,7 +212,7 @@ export default function SolicitudClient() {
                     </div>
                     <div className="text-slate-500 text-sm mt-0.5">
                       {t.rango}
-                      {t.precio !== null && ' · por vivienda + IVA'}
+                      {t.precio !== null && ' · por vivienda, IVA incluido'}
                     </div>
                   </button>
                 )
@@ -419,7 +419,7 @@ export default function SolicitudClient() {
                   <span className="text-violet-400 text-2xl font-bold">{formatoEuros(total)}</span>
                 </div>
                 <p className="text-slate-500 text-xs mt-1 text-right">
-                  + IVA{conHosting && ` · alojamiento aparte: ${formatoEurosCentimos(HOSTING_AGENCIA_ANUAL)}/año`}
+                  IVA incluido{conHosting && ` · alojamiento aparte: ${formatoEurosCentimos(HOSTING_AGENCIA_ANUAL)}/año`}
                 </p>
                 {!todosConPrecio && (
                   <p className="text-slate-500 text-xs mt-3">Indica los m² de cada inmueble para completar el cálculo.</p>
