@@ -2,11 +2,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, CalendarCheck, Users, LogOut } from 'lucide-react'
+import { LayoutDashboard, CalendarCheck, Users, LogOut, Building2 } from 'lucide-react'
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { href: '/admin/reservas', label: 'Reservas', icon: CalendarCheck },
+  { href: '/admin/solicitudes', label: 'Solicitudes agencias', icon: Building2 },
   { href: '/admin/contactos', label: 'Contactos', icon: Users },
 ]
 

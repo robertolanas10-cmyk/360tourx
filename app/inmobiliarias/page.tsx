@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Building2, CheckCircle, Clock, Shield, Star, Zap, Phone } from 'lucide-react'
 import ContactForm from '@/components/ContactForm'
+import { TRAMOS } from '@/lib/tarifas-agencia'
 
 export const metadata: Metadata = {
   title: 'Para Inmobiliarias',
@@ -32,8 +33,8 @@ const advantages = [
   },
   {
     icon: Building2,
-    title: 'Gestión múltiple',
-    description: 'Gestión centralizada de todos tus tours virtuales con panel de acceso dedicado.',
+    title: 'Todos tus pisos de una vez',
+    description: 'Nos pides varios inmuebles en una sola solicitud y te organizamos las visitas.',
   },
   {
     icon: CheckCircle,
@@ -42,12 +43,15 @@ const advantages = [
   },
 ]
 
-// Tarifas por volumen para agencias (precio por vivienda, + IVA).
-const tiers = [
-  { name: 'Start', range: '1–4 viviendas/mes', price: '210', popular: false },
-  { name: 'Pro', range: '5–19 viviendas/mes', price: '165', popular: true },
-  { name: 'Business', range: '20–49 viviendas/mes', price: '135', popular: false },
-]
+// Tarifas por volumen para agencias (precio por vivienda, + IVA). Salen de lib/tarifas-agencia.ts,
+// que también usan el formulario de solicitud y su API. "A medida" tiene su propia tarjeta.
+const tiers = TRAMOS.filter((t) => t.precio !== null).map((t) => ({
+  id: t.id,
+  name: t.nombre,
+  range: t.rango,
+  price: String(t.precio),
+  popular: t.popular,
+}))
 
 const tierFeatures = [
   'Tour virtual 360° profesional',
@@ -174,10 +178,13 @@ export default function InmobiliariasPage() {
                     </li>
                   ))}
                 </ul>
-                <a href="#contacto" className={tier.popular ? 'btn-primary' : 'btn-outline'}>
+                <Link
+                  href={`/inmobiliarias/solicitud?tramo=${tier.id}`}
+                  className={tier.popular ? 'btn-primary' : 'btn-outline'}
+                >
                   Empezar con {tier.name}
                   <ArrowRight size={16} />
-                </a>
+                </Link>
               </div>
             ))}
 
@@ -193,10 +200,10 @@ export default function InmobiliariasPage() {
                 Para redes de oficinas y agencias con mucho volumen. Organizamos contigo un calendario
                 de visitas para cumplir los plazos.
               </p>
-              <a href="#contacto" className="btn-outline">
+              <Link href="/inmobiliarias/solicitud?tramo=a_medida" className="btn-outline">
                 Hablemos
                 <ArrowRight size={16} />
-              </a>
+              </Link>
             </div>
           </div>
 

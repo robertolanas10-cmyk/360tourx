@@ -64,3 +64,39 @@ model Contacto {
 
   @@map("contactos")
 }
+
+// Solicitud de tours de una agencia inmobiliaria (formulario /inmobiliarias/solicitud).
+model SolicitudAgencia {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  agencia  String
+  contacto String
+  email    String
+  telefono String
+  tramo    String // tramo declarado para el primer mes: 'start' | 'pro' | 'business' | 'a_medida'
+  notas    String? @db.Text
+
+  // null si el tramo es "a medida" (se presupuesta aparte)
+  importeEstimado Decimal? @db.Decimal(10, 2)
+  estado          String   @default("nueva") // 'nueva' | 'presupuestada' | 'agendada' | 'completada' | 'descartada'
+
+  inmuebles InmuebleSolicitud[]
+
+  @@map("solicitudes_agencia")
+}
+
+model InmuebleSolicitud {
+  id          Int              @id @default(autoincrement())
+  solicitudId Int
+  solicitud   SolicitudAgencia @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
+
+  direccion       String
+  metros          Int
+  disponibleDesde DateTime @db.Date
+  franja          String // 'manana' | 'tarde' | 'indiferente'
+  precioEstimado  Decimal? @db.Decimal(10, 2)
+
+  @@index([solicitudId])
+  @@map("inmuebles_solicitud")
+}

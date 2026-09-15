@@ -55,15 +55,20 @@ app/
   landing/             # Landing STANDALONE (sin Navbar/Footer, ver SiteShell)
   precios/ proyectos/ inmobiliarias/ como-funcionamos/
   que-es-un-tour-virtual/ privacidad/ terminos/ reembolso/   # páginas de contenido
-  admin/               # Panel interno: dashboard, /admin/reservas, /admin/contactos
+  admin/               # Panel interno: dashboard, /admin/reservas, /admin/contactos, /admin/solicitudes
+  inmobiliarias/solicitud/  # Formulario de solicitud para agencias (varios inmuebles)
   api/
     create-checkout-session/route.ts  # crea Reserva + Stripe PaymentIntent
     contact/route.ts                  # guarda Contacto + envía emails (SMTP)
+    solicitud-agencia/route.ts        # guarda SolicitudAgencia + inmuebles + emails
     admin/reservas/  admin/contactos/ # GET listado + [id] para editar/borrar
 components/
   SiteShell.tsx        # decide si mostrar Navbar/Footer (según ruta)
   Navbar.tsx  Footer.tsx  ContactForm.tsx
 lib/prisma.ts          # singleton de PrismaClient (evita múltiples conexiones en dev)
+lib/tarifas-agencia.ts # tramos de agencias, suplemento por m² y cálculo de precio (fuente única)
+lib/email.ts           # envío SMTP compartido (no hace nada si faltan credenciales)
+lib/hosting.ts         # suscripción anual del hosting en Stripe
 prisma/schema.prisma   # modelos Reserva y Contacto (PostgreSQL / Neon)
 public/                # logo.png, logo.svg, imágenes
 ```
@@ -91,6 +96,9 @@ repetir cadenas largas de Tailwind:
   - `estadoPago`: `'pendiente' | 'completado' | 'fallido'`
   - `estadoTour`: `'pendiente' | 'en_proceso' | 'completado' | 'entregado'`
 - **`Contacto`** (`contactos`): formularios. `tipo`: `'contacto' | 'presupuesto_plus300' | 'inmobiliaria'`
+- **`SolicitudAgencia`** (`solicitudes_agencia`) + **`InmuebleSolicitud`** (`inmuebles_solicitud`, borrado en cascada): pedidos de agencias.
+  - `tramo`: `'start' | 'pro' | 'business' | 'a_medida'` · `estado`: `'nueva' | 'presupuestada' | 'agendada' | 'completada' | 'descartada'`
+  - `importeEstimado` / `precioEstimado` son `null` en "a medida".
 
 ## Precios (mantener sincronizados en 2 sitios)
 
@@ -129,6 +137,20 @@ Price anual se busca/crea por `lookup_key` (`hosting_tour_anual_<céntimos>`), a
 crearlo a mano en el Dashboard. Estado en la `Reserva`: `stripeSubscriptionId`, `hostingEstado`
 (`activo` | `cancela_al_vencer` | `impago` | `cancelado`) y `hostingVenceEl`. En `/admin/reservas`
 el filtro **"Hosting a retirar"** lista los cancelados/impagados: hay que sacar su tour del wildcard.
+
+### Solicitudes de agencias
+
+Los botones de cada plan de `/inmobiliarias` llevan a `/inmobiliarias/solicitud?tramo=<start|pro|business|a_medida>`.
+La agencia deja sus datos una vez y añade hasta 20 inmuebles (dirección, m², disponible desde, franja).
+`POST /api/solicitud-agencia` valida todo y **recalcula los precios en el servidor** con
+[lib/tarifas-agencia.ts](lib/tarifas-agencia.ts) (lo que mande el navegador se ignora), guarda
+`SolicitudAgencia` + `InmuebleSolicitud` y envía dos emails: aviso a `EMAIL_TO` y confirmación a la
+agencia. Tiene un campo trampa oculto (`web`) contra bots. Se gestionan en `/admin/solicitudes`
+(estados en [lib/solicitud-estados.ts](lib/solicitud-estados.ts)). El formulario de contacto del final de
+`/inmobiliarias` sigue igual, para dudas generales.
+
+Si cambian los tramos o el suplemento, se cambian solo en `lib/tarifas-agencia.ts`; los textos de las
+reglas de `/inmobiliarias` sí están escritos a mano.
 
 ## Gotchas / estado real del proyecto
 
