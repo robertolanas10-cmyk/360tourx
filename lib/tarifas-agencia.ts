@@ -23,7 +23,7 @@ export const TRAMOS: Tramo[] = [
 
 // Los precios cubren hasta este tamaño; por encima se suma SUPLEMENTO_POR_M2 por cada m² de más.
 export const METROS_INCLUIDOS = 120
-export const SUPLEMENTO_POR_M2 = 0.5
+export const SUPLEMENTO_POR_M2 = 0.25
 
 // Tope de seguridad por solicitud para "A medida" (los demás planes tienen su propio máximo).
 export const MAX_INMUEBLES = 100

@@ -68,7 +68,7 @@ const rules = [
   {
     title: 'Inmuebles de hasta 120 m²',
     description:
-      'Los precios son para viviendas de hasta 120 m². Por encima, se suman 0,50 € por cada m² adicional.',
+      'Los precios son para viviendas de hasta 120 m². Por encima, se suman 0,25 € por cada m² adicional.',
   },
   {
     title: 'Entrega en menos de 72 h desde la visita',
