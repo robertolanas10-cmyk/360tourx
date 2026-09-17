@@ -5,7 +5,8 @@ import Navbar from './Navbar'
 import Footer from './Footer'
 
 // Rutas que NO usan el Navbar/Footer principal
-const STANDALONE_ROUTES = ['/landing']
+// /admin tiene su propio menú lateral: la barra pública se le montaba encima.
+const STANDALONE_ROUTES = ['/landing', '/admin']
 
 export default function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
