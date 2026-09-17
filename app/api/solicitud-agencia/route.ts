@@ -168,6 +168,8 @@ export async function POST(req: NextRequest) {
         <p>Hemos recibido la solicitud de <strong>${escaparHtml(agencia)}</strong> para
         ${inmuebles.length} inmueble${inmuebles.length === 1 ? '' : 's'}. Te contactamos en menos de 24 horas
         para confirmar el presupuesto y proponerte las visitas.</p>
+        <p>Cuando esté confirmado te enviaremos a este mismo correo un <strong>enlace de pago</strong> para
+        abonarlo con tarjeta de forma segura. No tienes que pagar nada ahora.</p>
         ${tabla}
         <p><strong>Importe estimado:</strong> ${estimado}. Es una estimación según tu tramo y los m²
         indicados; te confirmamos el presupuesto definitivo.</p>

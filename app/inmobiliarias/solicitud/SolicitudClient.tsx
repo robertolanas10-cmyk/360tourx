@@ -130,8 +130,13 @@ export default function SolicitudClient() {
             Hemos recibido {inmuebles.length} inmueble{inmuebles.length === 1 ? '' : 's'} de{' '}
             <span className="text-white">{agencia.agencia}</span>.
           </p>
-          <p className="text-slate-400 leading-relaxed mb-8">
+          <p className="text-slate-400 leading-relaxed mb-6">
             Te contactamos en menos de 24 horas para confirmar el presupuesto y proponerte las visitas.
+          </p>
+          <p className="text-slate-300 text-sm leading-relaxed bg-[#0a0a0f] border border-[#1e1e2e] rounded-lg p-4 mb-8">
+            Una vez confirmado, te enviaremos un <span className="text-white font-semibold">enlace de pago</span> a{' '}
+            <span className="text-white">{agencia.email}</span> para que puedas abonarlo con tarjeta de forma segura.
+            No tienes que pagar nada ahora.
           </p>
           <Link href="/inmobiliarias" className="btn-outline">
             Volver a la página de agencias
