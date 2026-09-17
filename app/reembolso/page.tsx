@@ -96,7 +96,7 @@ export default function ReembolsoPage() {
               </li>
               <li>
                 El reembolso se realizará a través del mismo método de pago utilizado en la compra
-                (Stripe o PayPal).
+                (Stripe).
               </li>
             </ol>
           </section>

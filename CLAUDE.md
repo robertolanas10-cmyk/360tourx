@@ -16,7 +16,7 @@ Contacto real del negocio: `hola@360tourx.com` · `+34 644 85 73 26` · Madrid, 
 - **Next.js 14.2.5** (App Router) + **TypeScript** (strict)
 - **Tailwind CSS** (tema oscuro, marca violeta)
 - **Prisma** ORM sobre **PostgreSQL** (Neon)
-- **Stripe** (tarjeta / Apple Pay / Google Pay) + **PayPal** (aún placeholder)
+- **Stripe** (tarjeta / Apple Pay / Google Pay)
 - **Nodemailer** (SMTP) para emails de contacto
 - `lucide-react` (iconos), `framer-motion`, `react-hook-form`
 
@@ -181,8 +181,9 @@ del panel lista las canceladas/impagadas.
 - **✅ El panel `/admin` (y `/api/admin/*`) está protegido** por [middleware.ts](middleware.ts) con
   autenticación HTTP Basic. Credenciales en `ADMIN_USER` / `ADMIN_PASSWORD` (`.env.local`). Sin
   `ADMIN_PASSWORD` configurada, el panel se cierra por defecto (503) en vez de quedar abierto.
-- **PayPal es un placeholder**: abre una URL legacy de PayPal en otra pestaña y no registra el pago.
-  Falta integrarlo de verdad con `@paypal/react-paypal-js` (ya está instalado).
+- **PayPal se quitó de la web** (17 sep 2026): el botón era un placeholder que abría una URL antigua de
+  PayPal y no registraba el pago. Solo se cobra con Stripe. Quedan restos inofensivos: la dependencia
+  `@paypal/react-paypal-js` en package.json y las columnas `paypalId` / `metodoPago` de `Reserva`.
 - Emails y Stripe se **degradan silenciosamente** si faltan credenciales (comprueban `env` antes
   de actuar), así que en local sin claves no fallan pero tampoco envían/cobran.
 
@@ -204,4 +205,4 @@ del panel lista las canceladas/impagadas.
 ## Tareas pendientes conocidas
 
 Ver [PENDIENTE.md](PENDIENTE.md). Resumen: activar Stripe con claves reales + webhook, formulario
-de reunión +300m², integrar PayPal de verdad, configurar SMTP, y proteger el panel admin.
+de reunión +300m², configurar SMTP, y proteger el panel admin.

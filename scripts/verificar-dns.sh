@@ -24,7 +24,7 @@ chk A     "$D"                          "75.2.60.5"                             
 chk CNAME "www.$D"                      "marvelous-strudel-c5659a.netlify.app"       "CNAME www"
 
 echo "-- TOURS DE CLIENTES (no perder) --"
-for s in alocos copatlifemadrid delphinamadrid; do
+for s in alocos copatlifemadrid delphinamadrid montecillo70; do
   chk A "$s.$D" "92.205.150.148" "A $s"
 done
 
@@ -52,6 +52,6 @@ chk CNAME "_20b78a696a14f77daec62d876500bd4e.alocos.$D" \
   "8d239a05a5aaecebb13895084766a4d1.3a5c033412b73133ad28297bf3cf1764.750f7b954cbedda.comodoca.com" "CNAME _20b78a69....alocos"
 
 echo
-echo "=== RESULTADO: $ok correctos, $bad fallan (de 20) ==="
+echo "=== RESULTADO: $ok correctos, $bad fallan (de 21) ==="
 echo "-- Nameservers actuales (informativo) --"
 nslookup -type=NS "$D" "$SRV" 2>/dev/null | tr -d '\r' | grep -i nameserver | sed 's/^/  /'

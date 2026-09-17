@@ -15,7 +15,7 @@ const steps = [
     title: 'Contacta o reserva online',
     description:
       'Selecciona el servicio que mejor se adapta al tamaño de tu espacio y realiza tu reserva directamente en nuestra web. También puedes llamarnos o escribirnos para una tarifa personalizada.',
-    details: ['Reserva online 24/7', 'Pago seguro con Stripe o PayPal', 'Confirmación inmediata'],
+    details: ['Reserva online 24/7', 'Pago seguro con Stripe', 'Confirmación inmediata'],
   },
   {
     icon: Calendar,

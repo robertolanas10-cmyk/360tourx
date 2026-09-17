@@ -93,7 +93,6 @@ export default function BookingClient() {
   const [discountCode, setDiscountCode] = useState('')
   const [discountError, setDiscountError] = useState<string | null>(null)
   const [chargedAmount, setChargedAmount] = useState<number | null>(null)
-  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'paypal'>('stripe')
   const [meetingDescription, setMeetingDescription] = useState('')
   const [meetingType, setMeetingType] = useState<'video' | 'phone' | 'presencial'>('video')
   const [meetingSubmitted, setMeetingSubmitted] = useState(false)
@@ -640,32 +639,9 @@ export default function BookingClient() {
             <div>
               <h2 className="text-xl font-bold text-white mb-6">Completa el pago</h2>
 
-              {/* Payment method selector */}
-              <div className="flex gap-3 mb-6">
-                <button
-                  onClick={() => setPaymentMethod('stripe')}
-                  className={`flex-1 card p-3 text-sm font-medium transition-all ${
-                    paymentMethod === 'stripe'
-                      ? 'border-violet-500 bg-violet-600/10 text-white'
-                      : 'text-slate-400 hover:border-slate-600'
-                  }`}
-                >
-                  Tarjeta / Apple Pay / Google Pay
-                </button>
-                <button
-                  onClick={() => setPaymentMethod('paypal')}
-                  className={`flex-1 card p-3 text-sm font-medium transition-all ${
-                    paymentMethod === 'paypal'
-                      ? 'border-blue-500 bg-blue-500/10 text-white'
-                      : 'text-slate-400 hover:border-slate-600'
-                  }`}
-                >
-                  PayPal
-                </button>
-              </div>
+              <p className="text-slate-400 text-sm mb-6">Tarjeta, Apple Pay o Google Pay.</p>
 
-              {paymentMethod === 'stripe' && (
-                <Elements
+              <Elements
                   stripe={stripePromise}
                   options={{
                     clientSecret,
@@ -695,24 +671,7 @@ export default function BookingClient() {
                       customerEmail: contactInfo.email,
                     }}
                   />
-                </Elements>
-              )}
-
-              {paymentMethod === 'paypal' && (
-                <div className="card p-6">
-                  <p className="text-slate-400 text-sm mb-4 text-center">
-                    Serás redirigido a PayPal para completar el pago de forma segura.
-                  </p>
-                  <PayPalButton
-                    amount={totalPrice!}
-                    onBack={() => setStep(2)}
-                    bookingDetails={{
-                      service: selectedService.title,
-                      customerEmail: contactInfo.email,
-                    }}
-                  />
-                </div>
-              )}
+              </Elements>
             </div>
           ) : (
             <div className="flex items-center justify-center h-40">
@@ -721,58 +680,6 @@ export default function BookingClient() {
           )}
         </div>
       )}
-    </div>
-  )
-}
-
-// PayPal button component (lazy-loaded to avoid SSR issues)
-function PayPalButton({
-  amount,
-  onBack,
-  bookingDetails,
-}: {
-  amount: number
-  onBack: () => void
-  bookingDetails: { service: string; customerEmail: string }
-}) {
-  const [paid, setPaid] = useState(false)
-
-  if (paid) {
-    return (
-      <div className="text-center py-4">
-        <CheckCircle size={40} className="text-green-400 mx-auto mb-3" />
-        <h3 className="text-white font-bold text-lg mb-2">¡Pago completado!</h3>
-        <p className="text-slate-400 text-sm">
-          Recibirás la confirmación en {bookingDetails.customerEmail}
-        </p>
-      </div>
-    )
-  }
-
-  return (
-    <div className="space-y-3">
-      <button
-        className="w-full bg-[#0070ba] hover:bg-[#005a94] text-white font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 transition-colors"
-        onClick={() => {
-          // In production, use @paypal/react-paypal-js PayPalButtons component
-          // This is a placeholder that shows the concept
-          window.open(
-            `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=hola@360tourx.com&amount=${amount}&item_name=${encodeURIComponent(bookingDetails.service)}&currency_code=EUR`,
-            '_blank'
-          )
-        }}
-      >
-        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-          <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.384a.641.641 0 0 1 .633-.544h7.882c2.692 0 4.577.87 5.376 2.447.372.738.498 1.502.413 2.38-.025.26-.087.535-.162.812h.005c-.87 3.404-3.865 4.58-7.69 4.58H9.24a.641.641 0 0 0-.633.543l-1.14 6.785a.641.641 0 0 1-.39.45z" />
-        </svg>
-        Pagar {amount.toFixed(2)}€ con PayPal
-      </button>
-      <button onClick={onBack} className="btn-ghost w-full text-sm">
-        Volver atrás
-      </button>
-      <p className="text-xs text-slate-600 text-center">
-        Serás redirigido al sitio seguro de PayPal
-      </p>
     </div>
   )
 }

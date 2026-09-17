@@ -31,7 +31,7 @@ export default function PrivacidadPage() {
               <li>Dirección de correo electrónico</li>
               <li>Número de teléfono (opcional)</li>
               <li>Dirección del inmueble a fotografiar</li>
-              <li>Información de pago (procesada de forma segura por Stripe o PayPal; nunca almacenamos datos de tarjeta)</li>
+              <li>Información de pago (procesada de forma segura por Stripe; nunca almacenamos datos de tarjeta)</li>
             </ul>
             <p className="mt-3">
               También recopilamos automáticamente cierta información técnica cuando visitas nuestra web,
@@ -57,7 +57,7 @@ export default function PrivacidadPage() {
             <p>
               Adoptamos medidas técnicas y organizativas apropiadas para proteger tu información personal
               frente a accesos no autorizados, pérdida o divulgación. Los pagos son procesados exclusivamente
-              por pasarelas certificadas (Stripe y PayPal) que cumplen con el estándar PCI DSS.
+              por una pasarela certificada (Stripe) que cumple con el estándar PCI DSS.
             </p>
             <p className="mt-3">
               No vendemos, alquilamos ni cedemos tus datos personales a terceros, salvo que sea estrictamente
