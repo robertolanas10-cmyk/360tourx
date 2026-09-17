@@ -8,8 +8,7 @@ import {
   FRANJAS,
   HOSTING_AGENCIA_ANUAL,
   METROS_INCLUIDOS,
-  SUPLEMENTO_CADA_M2,
-  SUPLEMENTO_EUROS,
+  SUPLEMENTO_POR_M2,
   TRAMOS,
   type FranjaId,
   type TramoId,
@@ -465,8 +464,8 @@ export default function SolicitudClient() {
           </div>
 
           <p className="text-slate-500 text-xs leading-relaxed">
-            Precios para viviendas de hasta {METROS_INCLUIDOS} m². Por encima se suman {SUPLEMENTO_EUROS} € por cada{' '}
-            {SUPLEMENTO_CADA_M2} m² adicionales o fracción. Es una estimación: te confirmamos el presupuesto antes de
+            Precios para viviendas de hasta {METROS_INCLUIDOS} m². Por encima se suman{' '}
+            {formatoEurosCentimos(SUPLEMENTO_POR_M2)} por cada m² adicional. Es una estimación: te confirmamos el presupuesto antes de
             la visita y no pagas nada al enviar la solicitud.
           </p>
 

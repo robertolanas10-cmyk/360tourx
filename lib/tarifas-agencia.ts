@@ -21,11 +21,9 @@ export const TRAMOS: Tramo[] = [
   { id: 'a_medida', nombre: 'A medida', rango: '50 o más viviendas/mes', precio: null, maxInmuebles: null, popular: false },
 ]
 
-// Los precios cubren hasta este tamaño; por encima se suma SUPLEMENTO_EUROS por cada
-// SUPLEMENTO_CADA_M2 adicionales o fracción.
+// Los precios cubren hasta este tamaño; por encima se suma SUPLEMENTO_POR_M2 por cada m² de más.
 export const METROS_INCLUIDOS = 120
-export const SUPLEMENTO_EUROS = 100
-export const SUPLEMENTO_CADA_M2 = 100
+export const SUPLEMENTO_POR_M2 = 0.5
 
 // Tope de seguridad por solicitud para "A medida" (los demás planes tienen su propio máximo).
 export const MAX_INMUEBLES = 100
@@ -54,7 +52,8 @@ export function getTramo(id: string | null | undefined): Tramo | undefined {
 export function precioInmueble(tramo: Tramo, metros: number): number | null {
   if (tramo.precio === null) return null
   const exceso = Math.max(0, metros - METROS_INCLUIDOS)
-  return tramo.precio + Math.ceil(exceso / SUPLEMENTO_CADA_M2) * SUPLEMENTO_EUROS
+  // Se redondea a céntimos para que 0,5 €/m² no arrastre decimales sueltos.
+  return Math.round((tramo.precio + exceso * SUPLEMENTO_POR_M2) * 100) / 100
 }
 
 // Con céntimos (32,99 €), para importes que no son enteros.
@@ -65,5 +64,8 @@ export function formatoEurosCentimos(importe: number): string {
 // Formato manual (1.250 €) en vez de toLocaleString: el servidor y el navegador pueden
 // formatear distinto y React se quejaría al hidratar.
 export function formatoEuros(importe: number): string {
-  return `${String(Math.round(importe)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')} €`
+  // Con céntimos solo cuando los hay: 210 € / 237,50 €.
+  const [entero, decimales] = importe.toFixed(Number.isInteger(importe) ? 0 : 2).split('.')
+  const miles = entero.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  return `${miles}${decimales ? ',' + decimales : ''} €`
 }
