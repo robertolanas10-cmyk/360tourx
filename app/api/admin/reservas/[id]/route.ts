@@ -8,11 +8,20 @@ export async function PATCH(
   try {
     const id = parseInt(params.id)
     const body = await req.json()
-    const { estadoPago, estadoTour, notas, categoria, empresa, enlaceTour } = body
+    const {
+      nombre, email, telefono, direccion, servicioNombre, precio,
+      estadoPago, estadoTour, notas, categoria, empresa, enlaceTour,
+    } = body
 
     const reserva = await prisma.reserva.update({
       where: { id },
       data: {
+        ...(nombre !== undefined && { nombre }),
+        ...(email !== undefined && { email }),
+        ...(telefono !== undefined && { telefono }),
+        ...(direccion !== undefined && { direccion }),
+        ...(servicioNombre !== undefined && { servicioNombre }),
+        ...(precio !== undefined && { precio: precio === '' || precio === null ? null : Number(precio) }),
         ...(estadoPago !== undefined && { estadoPago }),
         ...(estadoTour !== undefined && { estadoTour }),
         ...(notas !== undefined && { notas }),

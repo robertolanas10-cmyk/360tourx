@@ -60,7 +60,12 @@ export default function ToursPage() {
   const [saving, setSaving] = useState(false)
   const [showAdd, setShowAdd] = useState(false)
   const [showAddCliente, setShowAddCliente] = useState(false)
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; label: string; onDelete: () => void } | null>(null)
+  const [contextMenu, setContextMenu] = useState<{
+    x: number
+    y: number
+    items: { label: string; onClick: () => void; danger?: boolean }[]
+  } | null>(null)
+  const [editing, setEditing] = useState<Reserva | null>(null)
 
   useEffect(() => {
     fetch('/api/admin/reservas')
@@ -167,9 +172,9 @@ export default function ToursPage() {
     if (selected?.id === id) setSelected(null)
   }
 
-  function openContextMenu(e: React.MouseEvent, label: string, onDelete: () => void) {
+  function openContextMenu(e: React.MouseEvent, items: { label: string; onClick: () => void; danger?: boolean }[]) {
     e.preventDefault()
-    setContextMenu({ x: e.clientX, y: e.clientY, label, onDelete })
+    setContextMenu({ x: e.clientX, y: e.clientY, items })
   }
 
   if (loading) {
@@ -263,7 +268,9 @@ export default function ToursPage() {
                   <button
                     key={emp}
                     onClick={() => setEmpresaSel(emp)}
-                    onContextMenu={(e) => openContextMenu(e, `la carpeta "${emp}"`, () => eliminarCarpetaEmpresa(emp, folder as string))}
+                    onContextMenu={(e) => openContextMenu(e, [
+                      { label: `Eliminar la carpeta "${emp}"`, onClick: () => eliminarCarpetaEmpresa(emp, folder as string), danger: true },
+                    ])}
                     className="bg-[#0a0a14] border border-[#1e1e2e] rounded-xl p-4 text-left hover:border-violet-500/40 hover:-translate-y-0.5 transition-all"
                   >
                     <FolderOpen size={20} className="text-violet-400" />
@@ -300,7 +307,10 @@ export default function ToursPage() {
                       <tr
                         key={r.id}
                         onClick={() => setSelected(r)}
-                        onContextMenu={(e) => openContextMenu(e, `el tour de "${r.nombre}"`, () => deleteReserva(r.id))}
+                        onContextMenu={(e) => openContextMenu(e, [
+                          { label: 'Editar tour', onClick: () => setEditing(r) },
+                          { label: `Eliminar el tour de "${r.nombre}"`, onClick: () => deleteReserva(r.id), danger: true },
+                        ])}
                         className={`border-b border-[#1e1e2e] last:border-0 cursor-pointer transition-colors ${
                           selected?.id === r.id ? 'bg-violet-600/10' : 'hover:bg-white/2'
                         }`}
@@ -341,7 +351,10 @@ export default function ToursPage() {
               <div className="w-80 bg-[#0a0a14] border border-[#1e1e2e] rounded-xl p-5 shrink-0 space-y-5 h-fit">
                 <div className="flex items-center justify-between">
                   <h3 className="text-white font-semibold">Tour #{selected.id}</h3>
-                  <button onClick={() => setSelected(null)} className="text-slate-500 hover:text-white text-lg leading-none">×</button>
+                  <div className="flex items-center gap-3">
+                    <button onClick={() => setEditing(selected)} className="text-xs text-violet-400 hover:text-violet-300">Editar todos los datos</button>
+                    <button onClick={() => setSelected(null)} className="text-slate-500 hover:text-white text-lg leading-none">×</button>
+                  </div>
                 </div>
 
                 <div className="space-y-2 text-sm">
@@ -434,7 +447,26 @@ export default function ToursPage() {
         </div>
       )}
 
-      {showAdd && <AddTourModal reservas={reservas} clientes={clientes} onClose={() => setShowAdd(false)} onCreated={onCreated} />}
+      {showAdd && (
+        <TourFormModal
+          reservas={reservas}
+          clientes={clientes}
+          onClose={() => setShowAdd(false)}
+          onSaved={onCreated}
+        />
+      )}
+      {editing && (
+        <TourFormModal
+          reserva={editing}
+          reservas={reservas}
+          clientes={clientes}
+          onClose={() => setEditing(null)}
+          onSaved={(r) => {
+            setReservas((prev) => prev.map((x) => (x.id === r.id ? r : x)))
+            setEditing(null)
+          }}
+        />
+      )}
       {showAddCliente && <AddClienteModal onClose={() => setShowAddCliente(false)} onCreated={onClienteCreated} />}
 
       {contextMenu && (
@@ -442,17 +474,22 @@ export default function ToursPage() {
           <div className="fixed inset-0 z-40" onClick={() => setContextMenu(null)} onContextMenu={(e) => { e.preventDefault(); setContextMenu(null) }} />
           <div
             style={{ top: contextMenu.y, left: contextMenu.x }}
-            className="fixed z-50 bg-[#111120] border border-[#1e1e2e] rounded-lg shadow-xl overflow-hidden"
+            className="fixed z-50 bg-[#111120] border border-[#1e1e2e] rounded-lg shadow-xl overflow-hidden min-w-[180px]"
           >
-            <button
-              onClick={() => {
-                contextMenu.onDelete()
-                setContextMenu(null)
-              }}
-              className="px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors whitespace-nowrap block w-full text-left"
-            >
-              Eliminar {contextMenu.label}
-            </button>
+            {contextMenu.items.map((item) => (
+              <button
+                key={item.label}
+                onClick={() => {
+                  item.onClick()
+                  setContextMenu(null)
+                }}
+                className={`px-4 py-2.5 text-sm transition-colors whitespace-nowrap block w-full text-left ${
+                  item.danger ? 'text-red-400 hover:bg-red-500/10' : 'text-slate-300 hover:bg-white/5'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
           </div>
         </>
       )}
@@ -545,29 +582,32 @@ function AddClienteModal({ onClose, onCreated }: { onClose: () => void; onCreate
   )
 }
 
-function AddTourModal({
+function TourFormModal({
+  reserva,
   reservas,
   clientes,
   onClose,
-  onCreated,
+  onSaved,
 }: {
+  reserva?: Reserva
   reservas: Reserva[]
   clientes: Cliente[]
   onClose: () => void
-  onCreated: (r: Reserva) => void
+  onSaved: (r: Reserva) => void
 }) {
+  const editMode = !!reserva
   const [form, setForm] = useState({
-    nombre: '',
-    categoria: 'particular',
-    direccion: '',
-    servicioNombre: '',
-    email: '',
-    telefono: '',
-    precio: '',
-    enlaceTour: '',
-    notas: '',
+    nombre: reserva?.nombre || '',
+    categoria: reserva?.categoria || 'particular',
+    direccion: reserva?.direccion || '',
+    servicioNombre: reserva?.servicioNombre || '',
+    email: reserva?.email || '',
+    telefono: reserva?.telefono || '',
+    precio: reserva?.precio != null ? String(reserva.precio) : '',
+    enlaceTour: reserva?.enlaceTour || '',
+    notas: reserva?.notas || '',
   })
-  const [empresa, setEmpresa] = useState('')
+  const [empresa, setEmpresa] = useState(reserva?.empresa || '')
   const [empresaFocused, setEmpresaFocused] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -594,25 +634,28 @@ function AddTourModal({
     }
     setSaving(true)
     setError(null)
-    const res = await fetch('/api/admin/reservas', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form, empresa: empresa || null }),
-    })
+    const res = await fetch(
+      editMode ? `/api/admin/reservas/${reserva!.id}` : '/api/admin/reservas',
+      {
+        method: editMode ? 'PATCH' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, empresa: empresa || null }),
+      }
+    )
     const data = await res.json()
     setSaving(false)
     if (!res.ok) {
-      setError(data.error || 'No se pudo crear el tour.')
+      setError(data.error || 'No se pudo guardar el tour.')
       return
     }
-    onCreated(data)
+    onSaved(data)
   }
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
       <div className="bg-[#0a0a14] border border-[#1e1e2e] rounded-xl p-6 w-full max-w-md space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-white font-semibold text-lg">Añadir tour a mano</h3>
+          <h3 className="text-white font-semibold text-lg">{editMode ? 'Editar tour' : 'Añadir tour a mano'}</h3>
           <button onClick={onClose} className="text-slate-500 hover:text-white">
             <X size={18} />
           </button>
@@ -711,6 +754,18 @@ function AddTourModal({
           </div>
 
           <div>
+            <label className="text-xs text-slate-500 block mb-1.5">Precio (€)</label>
+            <input
+              type="number"
+              step="0.01"
+              value={form.precio}
+              onChange={(e) => set('precio', e.target.value)}
+              placeholder="290"
+              className="w-full bg-[#111120] border border-[#1e1e2e] text-white text-sm rounded-lg px-3 py-2 placeholder:text-slate-600"
+            />
+          </div>
+
+          <div>
             <label className="text-xs text-slate-500 block mb-1.5">Enlace al tour</label>
             <input
               value={form.enlaceTour}
@@ -745,7 +800,7 @@ function AddTourModal({
             disabled={saving}
             className="flex-1 text-sm text-white bg-violet-600 hover:bg-violet-500 rounded-lg py-2 transition-colors disabled:opacity-50"
           >
-            {saving ? 'Guardando...' : 'Añadir tour'}
+            {saving ? 'Guardando...' : editMode ? 'Guardar cambios' : 'Añadir tour'}
           </button>
         </div>
       </div>
