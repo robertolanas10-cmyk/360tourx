@@ -22,6 +22,9 @@ CREATE TABLE "reservas" (
     "hostingVenceEl" TIMESTAMP(3),
     "estadoTour" TEXT NOT NULL DEFAULT 'pendiente',
     "notas" TEXT,
+    "categoria" TEXT,
+    "enlaceTour" TEXT,
+    "creadaManual" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "reservas_pkey" PRIMARY KEY ("id")
 );

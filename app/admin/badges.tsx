@@ -41,6 +41,27 @@ export function TourBadge({ estado }: { estado: string }) {
   )
 }
 
+export function CategoriaBadge({ categoria }: { categoria: string | null }) {
+  if (!categoria) return <span className="text-xs px-2 py-0.5 rounded-full border bg-slate-700/50 text-slate-400 border-slate-600">Sin categoría</span>
+  const map: Record<string, string> = {
+    inmobiliaria: 'bg-blue-500/15 text-blue-400 border-blue-500/30',
+    particular: 'bg-violet-500/15 text-violet-400 border-violet-500/30',
+    empresa: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+    hosteleria: 'bg-pink-500/15 text-pink-400 border-pink-500/30',
+  }
+  const label: Record<string, string> = {
+    inmobiliaria: 'Inmobiliaria',
+    particular: 'Particular',
+    empresa: 'Empresa',
+    hosteleria: 'Hostelería',
+  }
+  return (
+    <span className={`text-xs px-2 py-0.5 rounded-full border ${map[categoria] || 'bg-slate-700 text-slate-400'}`}>
+      {label[categoria] || categoria}
+    </span>
+  )
+}
+
 export function HostingBadge({ estado }: { estado: string | null }) {
   if (!estado) return null
   const map: Record<string, string> = {

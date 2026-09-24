@@ -15,3 +15,39 @@ export async function GET() {
     return NextResponse.json({ error: 'Error fetching reservas' }, { status: 500 })
   }
 }
+
+// Crea una entrada de tour a mano desde /admin/tours, para tours que no pasaron
+// por el flujo de reserva online (p. ej. hechos antes de tener la web, o pactados aparte).
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json()
+    const { nombre, email, telefono, direccion, servicioNombre, precio, categoria, enlaceTour, notas } = body
+
+    if (!nombre || !categoria) {
+      return NextResponse.json({ error: 'Faltan datos obligatorios (nombre y categoría)' }, { status: 400 })
+    }
+
+    const reserva = await prisma.reserva.create({
+      data: {
+        nombre,
+        email: email || '',
+        telefono: telefono || null,
+        direccion: direccion || '',
+        servicio: 'manual',
+        servicioNombre: servicioNombre || 'Tour añadido manualmente',
+        precio: precio ? Number(precio) : null,
+        estadoPago: 'completado',
+        estadoTour: 'entregado',
+        categoria,
+        enlaceTour: enlaceTour || null,
+        notas: notas || null,
+        creadaManual: true,
+      },
+    })
+
+    return NextResponse.json(reserva)
+  } catch (error) {
+    console.error(error)
+    return NextResponse.json({ error: 'Error creando el tour' }, { status: 500 })
+  }
+}

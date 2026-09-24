@@ -46,6 +46,11 @@ model Reserva {
   estadoTour     String   @default("pendiente") // 'pendiente' | 'en_proceso' | 'completado' | 'entregado'
   notas          String?  @db.Text
 
+  // Archivo de tours (panel /admin/tours)
+  categoria      String?  // 'inmobiliaria' | 'particular' | 'empresa' | 'hosteleria'
+  enlaceTour     String?  // enlace al tour 360 ya subido (Google Maps, web, etc.)
+  creadaManual   Boolean  @default(false) // true si se añadió a mano desde el admin, no desde una reserva online
+
   @@map("reservas")
 }
 

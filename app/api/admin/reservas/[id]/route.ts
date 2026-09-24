@@ -8,7 +8,7 @@ export async function PATCH(
   try {
     const id = parseInt(params.id)
     const body = await req.json()
-    const { estadoPago, estadoTour, notas } = body
+    const { estadoPago, estadoTour, notas, categoria, enlaceTour } = body
 
     const reserva = await prisma.reserva.update({
       where: { id },
@@ -16,6 +16,8 @@ export async function PATCH(
         ...(estadoPago !== undefined && { estadoPago }),
         ...(estadoTour !== undefined && { estadoTour }),
         ...(notas !== undefined && { notas }),
+        ...(categoria !== undefined && { categoria }),
+        ...(enlaceTour !== undefined && { enlaceTour }),
       },
     })
 
