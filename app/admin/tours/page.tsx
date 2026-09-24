@@ -60,6 +60,7 @@ export default function ToursPage() {
   const [saving, setSaving] = useState(false)
   const [showAdd, setShowAdd] = useState(false)
   const [showAddCliente, setShowAddCliente] = useState(false)
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; label: string; onDelete: () => void } | null>(null)
 
   useEffect(() => {
     fetch('/api/admin/reservas')
@@ -141,11 +142,23 @@ export default function ToursPage() {
   }
 
   async function eliminarCarpetaEmpresa(nombre: string, categoria: string) {
-    if (!confirm(`¿Eliminar la carpeta vacía "${nombre}"?`)) return
+    if (!confirm(`¿Eliminar la carpeta "${nombre}"? (los tours que tenga dentro no se borran, solo dejan de estar agrupados hasta que se les vuelva a asignar la empresa)`)) return
     const cliente = clientes.find((c) => c.nombre === nombre && c.categoria === categoria)
     if (cliente) await fetch(`/api/admin/clientes/${cliente.id}`, { method: 'DELETE' })
     setClientes((prev) => prev.filter((c) => !(c.nombre === nombre && c.categoria === categoria)))
     setEmpresaSel(null)
+  }
+
+  async function deleteReserva(id: number) {
+    if (!confirm('¿Eliminar este tour? Esta acción no se puede deshacer.')) return
+    await fetch(`/api/admin/reservas/${id}`, { method: 'DELETE' })
+    setReservas((prev) => prev.filter((r) => r.id !== id))
+    if (selected?.id === id) setSelected(null)
+  }
+
+  function openContextMenu(e: React.MouseEvent, label: string, onDelete: () => void) {
+    e.preventDefault()
+    setContextMenu({ x: e.clientX, y: e.clientY, label, onDelete })
   }
 
   if (loading) {
@@ -220,12 +233,12 @@ export default function ToursPage() {
             >
               ← {empresaSel ? `Volver a ${folders.find((f) => f.key === folder)?.label}` : 'Volver a carpetas'}
             </button>
-            {empresaSel && itemsEnCarpeta.length === 0 && (
+            {empresaSel && (
               <button
                 onClick={() => eliminarCarpetaEmpresa(empresaSel, folder as string)}
                 className="text-xs text-red-400 hover:text-red-300"
               >
-                Eliminar carpeta vacía
+                Eliminar carpeta
               </button>
             )}
           </div>
@@ -239,6 +252,7 @@ export default function ToursPage() {
                   <button
                     key={emp}
                     onClick={() => setEmpresaSel(emp)}
+                    onContextMenu={(e) => openContextMenu(e, `la carpeta "${emp}"`, () => eliminarCarpetaEmpresa(emp, folder as string))}
                     className="bg-[#0a0a14] border border-[#1e1e2e] rounded-xl p-4 text-left hover:border-violet-500/40 hover:-translate-y-0.5 transition-all"
                   >
                     <FolderOpen size={20} className="text-violet-400" />
@@ -275,6 +289,7 @@ export default function ToursPage() {
                       <tr
                         key={r.id}
                         onClick={() => setSelected(r)}
+                        onContextMenu={(e) => openContextMenu(e, `el tour de "${r.nombre}"`, () => deleteReserva(r.id))}
                         className={`border-b border-[#1e1e2e] last:border-0 cursor-pointer transition-colors ${
                           selected?.id === r.id ? 'bg-violet-600/10' : 'hover:bg-white/2'
                         }`}
@@ -394,6 +409,13 @@ export default function ToursPage() {
                 </div>
 
                 {saving && <p className="text-xs text-violet-400">Guardando...</p>}
+
+                <button
+                  onClick={() => deleteReserva(selected.id)}
+                  className="w-full text-sm text-red-400 border border-red-500/20 rounded-lg py-2 hover:bg-red-500/10 transition-colors"
+                >
+                  Eliminar tour
+                </button>
               </div>
             )}
           </div>
@@ -403,6 +425,26 @@ export default function ToursPage() {
 
       {showAdd && <AddTourModal reservas={reservas} clientes={clientes} onClose={() => setShowAdd(false)} onCreated={onCreated} />}
       {showAddCliente && <AddClienteModal onClose={() => setShowAddCliente(false)} onCreated={onClienteCreated} />}
+
+      {contextMenu && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setContextMenu(null)} onContextMenu={(e) => { e.preventDefault(); setContextMenu(null) }} />
+          <div
+            style={{ top: contextMenu.y, left: contextMenu.x }}
+            className="fixed z-50 bg-[#111120] border border-[#1e1e2e] rounded-lg shadow-xl overflow-hidden"
+          >
+            <button
+              onClick={() => {
+                contextMenu.onDelete()
+                setContextMenu(null)
+              }}
+              className="px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors whitespace-nowrap block w-full text-left"
+            >
+              Eliminar {contextMenu.label}
+            </button>
+          </div>
+        </>
+      )}
     </div>
   )
 }
