@@ -39,6 +39,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => {
+                  if (item.href === '/admin/tours') window.dispatchEvent(new Event('admin-tours:reset'))
+                }}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                   active
                     ? 'bg-violet-600/20 text-violet-300 border border-violet-500/30'

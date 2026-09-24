@@ -74,6 +74,17 @@ export default function ToursPage() {
       .then((data) => setClientes(Array.isArray(data) ? data : []))
   }, [])
 
+  // Al hacer clic en "Tours" del menú lateral estando ya dentro de una carpeta, vuelve a la vista principal
+  useEffect(() => {
+    const resetear = () => {
+      setFolder(null)
+      setEmpresaSel(null)
+      setSelected(null)
+    }
+    window.addEventListener('admin-tours:reset', resetear)
+    return () => window.removeEventListener('admin-tours:reset', resetear)
+  }, [])
+
   const pagadas = reservas.filter((r) => r.estadoPago === 'completado')
   const terminadas = pagadas.filter((r) => r.estadoTour === 'completado' || r.estadoTour === 'entregado')
   const enProceso = pagadas.filter((r) => r.estadoTour !== 'completado' && r.estadoTour !== 'entregado')
