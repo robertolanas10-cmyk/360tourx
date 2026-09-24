@@ -55,6 +55,20 @@ model Reserva {
   @@map("reservas")
 }
 
+// Clientes/empresas del archivo de tours (panel /admin/tours), independientes de si ya
+// tienen algún tour subido. Permite crear la carpeta de un cliente antes de tener nada
+// que meter dentro, y sirve como lista para el buscador al añadir un tour.
+model ClienteEmpresa {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  nombre    String
+  categoria String // 'inmobiliaria' | 'particular' | 'empresa' | 'hosteleria'
+
+  @@unique([nombre, categoria])
+  @@map("clientes_empresa")
+}
+
 model Contacto {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())

@@ -22,6 +22,14 @@ export async function PATCH(
       },
     })
 
+    if (reserva.empresa && reserva.categoria) {
+      await prisma.clienteEmpresa.upsert({
+        where: { nombre_categoria: { nombre: reserva.empresa, categoria: reserva.categoria } },
+        update: {},
+        create: { nombre: reserva.empresa, categoria: reserva.categoria },
+      })
+    }
+
     return NextResponse.json(reserva)
   } catch (error) {
     console.error(error)

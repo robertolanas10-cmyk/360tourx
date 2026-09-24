@@ -44,14 +44,22 @@ const CATEGORIAS = [
 
 type FolderKey = 'en_proceso' | 'sin_categoria' | 'inmobiliaria' | 'particular' | 'empresa' | 'hosteleria'
 
+interface Cliente {
+  id: number
+  nombre: string
+  categoria: string
+}
+
 export default function ToursPage() {
   const [reservas, setReservas] = useState<Reserva[]>([])
+  const [clientes, setClientes] = useState<Cliente[]>([])
   const [loading, setLoading] = useState(true)
   const [folder, setFolder] = useState<FolderKey | null>(null)
   const [empresaSel, setEmpresaSel] = useState<string | null>(null)
   const [selected, setSelected] = useState<Reserva | null>(null)
   const [saving, setSaving] = useState(false)
   const [showAdd, setShowAdd] = useState(false)
+  const [showAddCliente, setShowAddCliente] = useState(false)
 
   useEffect(() => {
     fetch('/api/admin/reservas')
@@ -60,6 +68,9 @@ export default function ToursPage() {
         setReservas(Array.isArray(data) ? data : [])
         setLoading(false)
       })
+    fetch('/api/admin/clientes')
+      .then((r) => r.json())
+      .then((data) => setClientes(Array.isArray(data) ? data : []))
   }, [])
 
   const pagadas = reservas.filter((r) => r.estadoPago === 'completado')
@@ -81,10 +92,15 @@ export default function ToursPage() {
 
   const esCategoriaConEmpresas = !!folder && CATEGORIAS.some((c) => c.key === folder)
 
-  // Tours de la categoría actual, agrupados por empresa/cliente (subcarpetas) + los que van sueltos
+  // Tours de la categoría actual, agrupados por empresa/cliente (subcarpetas) + los que van sueltos.
+  // Las subcarpetas salen de la lista de clientes guardados (aunque no tengan tours todavía) más
+  // cualquier empresa que ya tenga tours pero no esté en esa lista (compatibilidad con datos antiguos).
   const itemsCategoria = esCategoriaConEmpresas ? terminadas.filter((r) => r.categoria === folder) : []
   const empresasEnCategoria = Array.from(
-    new Set(itemsCategoria.filter((r) => r.empresa).map((r) => r.empresa as string))
+    new Set([
+      ...clientes.filter((c) => c.categoria === folder).map((c) => c.nombre),
+      ...itemsCategoria.filter((r) => r.empresa).map((r) => r.empresa as string),
+    ])
   ).sort()
   const sueltosEnCategoria = itemsCategoria.filter((r) => !r.empresa)
 
@@ -96,8 +112,10 @@ export default function ToursPage() {
     return terminadas.filter((r) => r.categoria === folder)
   })()
 
-  // Todas las empresas ya guardadas (de cualquier categoría), para el selector "cliente ya existente"
-  const todasLasEmpresas = Array.from(new Set(reservas.filter((r) => r.empresa).map((r) => r.empresa as string))).sort()
+  // Todas las empresas ya guardadas (de cualquier categoría), para el buscador y el datalist
+  const todasLasEmpresas = Array.from(
+    new Set([...clientes.map((c) => c.nombre), ...reservas.filter((r) => r.empresa).map((r) => r.empresa as string)])
+  ).sort()
 
   async function updateReserva(id: number, data: Partial<Reserva>) {
     setSaving(true)
@@ -115,6 +133,19 @@ export default function ToursPage() {
   function onCreated(nueva: Reserva) {
     setReservas((prev) => [nueva, ...prev])
     setShowAdd(false)
+  }
+
+  function onClienteCreated(nuevo: Cliente) {
+    setClientes((prev) => (prev.some((c) => c.id === nuevo.id) ? prev : [...prev, nuevo]))
+    setShowAddCliente(false)
+  }
+
+  async function eliminarCarpetaEmpresa(nombre: string, categoria: string) {
+    if (!confirm(`¿Eliminar la carpeta vacía "${nombre}"?`)) return
+    const cliente = clientes.find((c) => c.nombre === nombre && c.categoria === categoria)
+    if (cliente) await fetch(`/api/admin/clientes/${cliente.id}`, { method: 'DELETE' })
+    setClientes((prev) => prev.filter((c) => !(c.nombre === nombre && c.categoria === categoria)))
+    setEmpresaSel(null)
   }
 
   if (loading) {
@@ -137,13 +168,22 @@ export default function ToursPage() {
             Archivo de tours pagados, organizado por tipo de cliente.
           </p>
         </div>
-        <button
-          onClick={() => setShowAdd(true)}
-          className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-        >
-          <Plus size={16} />
-          Añadir tour a mano
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setShowAddCliente(true)}
+            className="flex items-center gap-2 border border-[#1e1e2e] hover:border-violet-500/40 text-slate-300 text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          >
+            <Plus size={16} />
+            Añadir cliente
+          </button>
+          <button
+            onClick={() => setShowAdd(true)}
+            className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          >
+            <Plus size={16} />
+            Añadir tour a mano
+          </button>
+        </div>
       </div>
 
       {/* Vista de carpetas */}
@@ -166,19 +206,29 @@ export default function ToursPage() {
       {/* Vista dentro de una carpeta */}
       {folder && (
         <div>
-          <button
-            onClick={() => {
-              if (empresaSel) {
-                setEmpresaSel(null)
-              } else {
-                setFolder(null)
-              }
-              setSelected(null)
-            }}
-            className="text-sm text-slate-400 hover:text-white mb-4 flex items-center gap-1"
-          >
-            ← {empresaSel ? `Volver a ${folders.find((f) => f.key === folder)?.label}` : 'Volver a carpetas'}
-          </button>
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={() => {
+                if (empresaSel) {
+                  setEmpresaSel(null)
+                } else {
+                  setFolder(null)
+                }
+                setSelected(null)
+              }}
+              className="text-sm text-slate-400 hover:text-white flex items-center gap-1"
+            >
+              ← {empresaSel ? `Volver a ${folders.find((f) => f.key === folder)?.label}` : 'Volver a carpetas'}
+            </button>
+            {empresaSel && itemsEnCarpeta.length === 0 && (
+              <button
+                onClick={() => eliminarCarpetaEmpresa(empresaSel, folder as string)}
+                className="text-xs text-red-400 hover:text-red-300"
+              >
+                Eliminar carpeta vacía
+              </button>
+            )}
+          </div>
 
           {/* Subcarpetas por empresa/cliente, solo al entrar en una categoría (no dentro de una empresa concreta) */}
           {esCategoriaConEmpresas && !empresaSel && empresasEnCategoria.length > 0 && (
@@ -351,17 +401,105 @@ export default function ToursPage() {
         </div>
       )}
 
-      {showAdd && <AddTourModal reservas={reservas} onClose={() => setShowAdd(false)} onCreated={onCreated} />}
+      {showAdd && <AddTourModal reservas={reservas} clientes={clientes} onClose={() => setShowAdd(false)} onCreated={onCreated} />}
+      {showAddCliente && <AddClienteModal onClose={() => setShowAddCliente(false)} onCreated={onClienteCreated} />}
+    </div>
+  )
+}
+
+function AddClienteModal({ onClose, onCreated }: { onClose: () => void; onCreated: (c: Cliente) => void }) {
+  const [nombre, setNombre] = useState('')
+  const [categoria, setCategoria] = useState('inmobiliaria')
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function submit() {
+    if (!nombre.trim()) {
+      setError('Escribe el nombre del cliente o empresa.')
+      return
+    }
+    setSaving(true)
+    setError(null)
+    const res = await fetch('/api/admin/clientes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre: nombre.trim(), categoria }),
+    })
+    const data = await res.json()
+    setSaving(false)
+    if (!res.ok) {
+      setError(data.error || 'No se pudo crear el cliente.')
+      return
+    }
+    onCreated(data)
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+      <div className="bg-[#0a0a14] border border-[#1e1e2e] rounded-xl p-6 w-full max-w-sm space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-white font-semibold text-lg">Añadir cliente</h3>
+          <button onClick={onClose} className="text-slate-500 hover:text-white">
+            <X size={18} />
+          </button>
+        </div>
+        <p className="text-slate-500 text-xs">
+          Crea la carpeta de un cliente o empresa aunque todavía no tenga ningún tour, para poder añadirlos más adelante.
+        </p>
+
+        <div>
+          <label className="text-xs text-slate-500 block mb-1.5">Nombre *</label>
+          <input
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            placeholder="Ej. Inmobiliaria Alcobendas"
+            className="w-full bg-[#111120] border border-[#1e1e2e] text-white text-sm rounded-lg px-3 py-2 placeholder:text-slate-600"
+          />
+        </div>
+
+        <div>
+          <label className="text-xs text-slate-500 block mb-1.5">Categoría *</label>
+          <select
+            value={categoria}
+            onChange={(e) => setCategoria(e.target.value)}
+            className="w-full bg-[#111120] border border-[#1e1e2e] text-white text-sm rounded-lg px-3 py-2"
+          >
+            {CATEGORIAS.map((c) => (
+              <option key={c.key} value={c.key}>{c.label}</option>
+            ))}
+          </select>
+        </div>
+
+        {error && <p className="text-xs text-red-400">{error}</p>}
+
+        <div className="flex gap-3 pt-2">
+          <button
+            onClick={onClose}
+            className="flex-1 text-sm text-slate-400 border border-[#1e1e2e] rounded-lg py-2 hover:text-white transition-colors"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={submit}
+            disabled={saving}
+            className="flex-1 text-sm text-white bg-violet-600 hover:bg-violet-500 rounded-lg py-2 transition-colors disabled:opacity-50"
+          >
+            {saving ? 'Guardando...' : 'Añadir cliente'}
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
 
 function AddTourModal({
   reservas,
+  clientes,
   onClose,
   onCreated,
 }: {
   reservas: Reserva[]
+  clientes: Cliente[]
   onClose: () => void
   onCreated: (r: Reserva) => void
 }) {
@@ -376,8 +514,8 @@ function AddTourModal({
     enlaceTour: '',
     notas: '',
   })
-  const [empresaModo, setEmpresaModo] = useState<'nueva' | 'existente'>('nueva')
   const [empresa, setEmpresa] = useState('')
+  const [empresaFocused, setEmpresaFocused] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -386,12 +524,15 @@ function AddTourModal({
   }
 
   const empresasDeCategoria = Array.from(
-    new Set(
-      reservas
-        .filter((r) => r.categoria === form.categoria && r.empresa)
-        .map((r) => r.empresa as string)
-    )
+    new Set([
+      ...clientes.filter((c) => c.categoria === form.categoria).map((c) => c.nombre),
+      ...reservas.filter((r) => r.categoria === form.categoria && r.empresa).map((r) => r.empresa as string),
+    ])
   ).sort()
+
+  const sugerencias = empresa.trim()
+    ? empresasDeCategoria.filter((e) => e.toLowerCase().includes(empresa.trim().toLowerCase())).slice(0, 6)
+    : empresasDeCategoria.slice(0, 6)
 
   async function submit() {
     if (!form.nombre.trim()) {
@@ -451,46 +592,30 @@ function AddTourModal({
             </select>
           </div>
 
-          <div>
+          <div className="relative">
             <label className="text-xs text-slate-500 block mb-1.5">Empresa / cliente (opcional, para agrupar en subcarpeta)</label>
-            <div className="flex gap-2 mb-2">
-              <button
-                type="button"
-                onClick={() => { setEmpresaModo('nueva'); setEmpresa('') }}
-                className={`flex-1 text-xs py-1.5 rounded-lg border transition-colors ${
-                  empresaModo === 'nueva' ? 'bg-violet-600 border-violet-600 text-white' : 'border-[#1e1e2e] text-slate-400'
-                }`}
-              >
-                Cliente nuevo
-              </button>
-              <button
-                type="button"
-                disabled={empresasDeCategoria.length === 0}
-                onClick={() => { setEmpresaModo('existente'); setEmpresa(empresasDeCategoria[0] || '') }}
-                className={`flex-1 text-xs py-1.5 rounded-lg border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
-                  empresaModo === 'existente' ? 'bg-violet-600 border-violet-600 text-white' : 'border-[#1e1e2e] text-slate-400'
-                }`}
-              >
-                Cliente ya existente
-              </button>
-            </div>
-            {empresaModo === 'nueva' ? (
-              <input
-                value={empresa}
-                onChange={(e) => setEmpresa(e.target.value)}
-                placeholder="Ej. Inmobiliaria Alcobendas (déjalo vacío si no aplica)"
-                className="w-full bg-[#111120] border border-[#1e1e2e] text-white text-sm rounded-lg px-3 py-2 placeholder:text-slate-600"
-              />
-            ) : (
-              <select
-                value={empresa}
-                onChange={(e) => setEmpresa(e.target.value)}
-                className="w-full bg-[#111120] border border-[#1e1e2e] text-white text-sm rounded-lg px-3 py-2"
-              >
-                {empresasDeCategoria.map((emp) => (
-                  <option key={emp} value={emp}>{emp}</option>
+            <input
+              value={empresa}
+              onChange={(e) => setEmpresa(e.target.value)}
+              onFocus={() => setEmpresaFocused(true)}
+              onBlur={() => setTimeout(() => setEmpresaFocused(false), 150)}
+              placeholder="Escribe para buscar, o un nombre nuevo si no existe"
+              autoComplete="off"
+              className="w-full bg-[#111120] border border-[#1e1e2e] text-white text-sm rounded-lg px-3 py-2 placeholder:text-slate-600"
+            />
+            {empresaFocused && sugerencias.length > 0 && (
+              <div className="absolute z-10 mt-1 w-full bg-[#111120] border border-[#1e1e2e] rounded-lg overflow-hidden shadow-lg">
+                {sugerencias.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onMouseDown={() => setEmpresa(s)}
+                    className="w-full text-left px-3 py-2 text-sm text-slate-300 hover:bg-violet-600/20 hover:text-white transition-colors"
+                  >
+                    {s}
+                  </button>
                 ))}
-              </select>
+              </div>
             )}
           </div>
 

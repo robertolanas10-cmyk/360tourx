@@ -46,6 +46,14 @@ export async function POST(req: NextRequest) {
       },
     })
 
+    if (empresa) {
+      await prisma.clienteEmpresa.upsert({
+        where: { nombre_categoria: { nombre: empresa, categoria } },
+        update: {},
+        create: { nombre: empresa, categoria },
+      })
+    }
+
     return NextResponse.json(reserva)
   } catch (error) {
     console.error(error)

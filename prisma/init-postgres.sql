@@ -34,6 +34,19 @@ CREATE TABLE "reservas" (
 CREATE UNIQUE INDEX "reservas_stripeSubscriptionId_key" ON "reservas"("stripeSubscriptionId");
 
 -- CreateTable
+CREATE TABLE "clientes_empresa" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "nombre" TEXT NOT NULL,
+    "categoria" TEXT NOT NULL,
+
+    CONSTRAINT "clientes_empresa_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "clientes_empresa_nombre_categoria_key" ON "clientes_empresa"("nombre", "categoria");
+
+-- CreateTable
 CREATE TABLE "contactos" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
