@@ -24,3 +24,7 @@ server_key*
 # Stripe CLI local (no commitear)
 /tools/
 *.tsbuildinfo
+
+# Local Netlify folder
+.netlify
+deno.lock

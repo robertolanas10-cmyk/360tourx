@@ -27,6 +27,7 @@ interface Reserva {
   estadoPago: string
   estadoTour: string
   categoria: string | null
+  empresa: string | null
   enlaceTour: string | null
   notas: string | null
   creadaManual: boolean
@@ -47,6 +48,7 @@ export default function ToursPage() {
   const [reservas, setReservas] = useState<Reserva[]>([])
   const [loading, setLoading] = useState(true)
   const [folder, setFolder] = useState<FolderKey | null>(null)
+  const [empresaSel, setEmpresaSel] = useState<string | null>(null)
   const [selected, setSelected] = useState<Reserva | null>(null)
   const [saving, setSaving] = useState(false)
   const [showAdd, setShowAdd] = useState(false)
@@ -77,11 +79,25 @@ export default function ToursPage() {
     { key: 'sin_categoria', label: 'Sin categoría', icon: HelpCircle, count: sinCategoria.length, tint: 'text-slate-400' },
   ]
 
+  const esCategoriaConEmpresas = !!folder && CATEGORIAS.some((c) => c.key === folder)
+
+  // Tours de la categoría actual, agrupados por empresa/cliente (subcarpetas) + los que van sueltos
+  const itemsCategoria = esCategoriaConEmpresas ? terminadas.filter((r) => r.categoria === folder) : []
+  const empresasEnCategoria = Array.from(
+    new Set(itemsCategoria.filter((r) => r.empresa).map((r) => r.empresa as string))
+  ).sort()
+  const sueltosEnCategoria = itemsCategoria.filter((r) => !r.empresa)
+
   const itemsEnCarpeta = (() => {
     if (folder === 'en_proceso') return enProceso
     if (folder === 'sin_categoria') return sinCategoria
+    if (esCategoriaConEmpresas && empresaSel) return itemsCategoria.filter((r) => r.empresa === empresaSel)
+    if (esCategoriaConEmpresas) return sueltosEnCategoria // vista de categoría: solo los sueltos, las agrupadas van en subcarpetas
     return terminadas.filter((r) => r.categoria === folder)
   })()
+
+  // Todas las empresas ya guardadas (de cualquier categoría), para el selector "cliente ya existente"
+  const todasLasEmpresas = Array.from(new Set(reservas.filter((r) => r.empresa).map((r) => r.empresa as string))).sort()
 
   async function updateReserva(id: number, data: Partial<Reserva>) {
     setSaving(true)
@@ -152,14 +168,43 @@ export default function ToursPage() {
         <div>
           <button
             onClick={() => {
-              setFolder(null)
+              if (empresaSel) {
+                setEmpresaSel(null)
+              } else {
+                setFolder(null)
+              }
               setSelected(null)
             }}
             className="text-sm text-slate-400 hover:text-white mb-4 flex items-center gap-1"
           >
-            ← Volver a carpetas
+            ← {empresaSel ? `Volver a ${folders.find((f) => f.key === folder)?.label}` : 'Volver a carpetas'}
           </button>
 
+          {/* Subcarpetas por empresa/cliente, solo al entrar en una categoría (no dentro de una empresa concreta) */}
+          {esCategoriaConEmpresas && !empresaSel && empresasEnCategoria.length > 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
+              {empresasEnCategoria.map((emp) => {
+                const count = itemsCategoria.filter((r) => r.empresa === emp).length
+                return (
+                  <button
+                    key={emp}
+                    onClick={() => setEmpresaSel(emp)}
+                    className="bg-[#0a0a14] border border-[#1e1e2e] rounded-xl p-4 text-left hover:border-violet-500/40 hover:-translate-y-0.5 transition-all"
+                  >
+                    <FolderOpen size={20} className="text-violet-400" />
+                    <div className="text-white font-medium mt-2 text-sm">{emp}</div>
+                    <div className="text-slate-500 text-xs mt-0.5">{count} tour{count === 1 ? '' : 's'}</div>
+                  </button>
+                )
+              })}
+            </div>
+          )}
+
+          {esCategoriaConEmpresas && !empresaSel && itemsEnCarpeta.length > 0 && (
+            <p className="text-slate-500 text-xs mb-3">Sueltos (sin empresa/cliente asignado):</p>
+          )}
+
+          {!(esCategoriaConEmpresas && !empresaSel && itemsEnCarpeta.length === 0 && empresasEnCategoria.length > 0) && (
           <div className="flex gap-6">
             <div className="flex-1 bg-[#0a0a14] border border-[#1e1e2e] rounded-xl overflow-hidden">
               {itemsEnCarpeta.length === 0 ? (
@@ -249,6 +294,21 @@ export default function ToursPage() {
                 </div>
 
                 <div>
+                  <label className="text-xs text-slate-500 block mb-1.5">Empresa / cliente (para agrupar en subcarpeta)</label>
+                  <input
+                    type="text"
+                    list="empresas-existentes"
+                    defaultValue={selected.empresa || ''}
+                    onBlur={(e) => updateReserva(selected.id, { empresa: e.target.value || null })}
+                    placeholder="Ej. Inmobiliaria Alcobendas"
+                    className="w-full bg-[#111120] border border-[#1e1e2e] text-white text-sm rounded-lg px-3 py-2 placeholder:text-slate-600"
+                  />
+                  <datalist id="empresas-existentes">
+                    {todasLasEmpresas.map((emp) => <option key={emp} value={emp} />)}
+                  </datalist>
+                </div>
+
+                <div>
                   <label className="text-xs text-slate-500 block mb-1.5">Estado del tour</label>
                   <select
                     value={selected.estadoTour}
@@ -287,15 +347,24 @@ export default function ToursPage() {
               </div>
             )}
           </div>
+          )}
         </div>
       )}
 
-      {showAdd && <AddTourModal onClose={() => setShowAdd(false)} onCreated={onCreated} />}
+      {showAdd && <AddTourModal reservas={reservas} onClose={() => setShowAdd(false)} onCreated={onCreated} />}
     </div>
   )
 }
 
-function AddTourModal({ onClose, onCreated }: { onClose: () => void; onCreated: (r: Reserva) => void }) {
+function AddTourModal({
+  reservas,
+  onClose,
+  onCreated,
+}: {
+  reservas: Reserva[]
+  onClose: () => void
+  onCreated: (r: Reserva) => void
+}) {
   const [form, setForm] = useState({
     nombre: '',
     categoria: 'particular',
@@ -307,12 +376,22 @@ function AddTourModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
     enlaceTour: '',
     notas: '',
   })
+  const [empresaModo, setEmpresaModo] = useState<'nueva' | 'existente'>('nueva')
+  const [empresa, setEmpresa] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   function set<K extends keyof typeof form>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }))
   }
+
+  const empresasDeCategoria = Array.from(
+    new Set(
+      reservas
+        .filter((r) => r.categoria === form.categoria && r.empresa)
+        .map((r) => r.empresa as string)
+    )
+  ).sort()
 
   async function submit() {
     if (!form.nombre.trim()) {
@@ -324,7 +403,7 @@ function AddTourModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
     const res = await fetch('/api/admin/reservas', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+      body: JSON.stringify({ ...form, empresa: empresa || null }),
     })
     const data = await res.json()
     setSaving(false)
@@ -360,13 +439,59 @@ function AddTourModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
             <label className="text-xs text-slate-500 block mb-1.5">Categoría *</label>
             <select
               value={form.categoria}
-              onChange={(e) => set('categoria', e.target.value)}
+              onChange={(e) => {
+                set('categoria', e.target.value)
+                setEmpresa('')
+              }}
               className="w-full bg-[#111120] border border-[#1e1e2e] text-white text-sm rounded-lg px-3 py-2"
             >
               {CATEGORIAS.map((c) => (
                 <option key={c.key} value={c.key}>{c.label}</option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <label className="text-xs text-slate-500 block mb-1.5">Empresa / cliente (opcional, para agrupar en subcarpeta)</label>
+            <div className="flex gap-2 mb-2">
+              <button
+                type="button"
+                onClick={() => { setEmpresaModo('nueva'); setEmpresa('') }}
+                className={`flex-1 text-xs py-1.5 rounded-lg border transition-colors ${
+                  empresaModo === 'nueva' ? 'bg-violet-600 border-violet-600 text-white' : 'border-[#1e1e2e] text-slate-400'
+                }`}
+              >
+                Cliente nuevo
+              </button>
+              <button
+                type="button"
+                disabled={empresasDeCategoria.length === 0}
+                onClick={() => { setEmpresaModo('existente'); setEmpresa(empresasDeCategoria[0] || '') }}
+                className={`flex-1 text-xs py-1.5 rounded-lg border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
+                  empresaModo === 'existente' ? 'bg-violet-600 border-violet-600 text-white' : 'border-[#1e1e2e] text-slate-400'
+                }`}
+              >
+                Cliente ya existente
+              </button>
+            </div>
+            {empresaModo === 'nueva' ? (
+              <input
+                value={empresa}
+                onChange={(e) => setEmpresa(e.target.value)}
+                placeholder="Ej. Inmobiliaria Alcobendas (déjalo vacío si no aplica)"
+                className="w-full bg-[#111120] border border-[#1e1e2e] text-white text-sm rounded-lg px-3 py-2 placeholder:text-slate-600"
+              />
+            ) : (
+              <select
+                value={empresa}
+                onChange={(e) => setEmpresa(e.target.value)}
+                className="w-full bg-[#111120] border border-[#1e1e2e] text-white text-sm rounded-lg px-3 py-2"
+              >
+                {empresasDeCategoria.map((emp) => (
+                  <option key={emp} value={emp}>{emp}</option>
+                ))}
+              </select>
+            )}
           </div>
 
           <div>

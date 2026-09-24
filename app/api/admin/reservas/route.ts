@@ -21,7 +21,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { nombre, email, telefono, direccion, servicioNombre, precio, categoria, enlaceTour, notas } = body
+    const { nombre, email, telefono, direccion, servicioNombre, precio, categoria, empresa, enlaceTour, notas } = body
 
     if (!nombre || !categoria) {
       return NextResponse.json({ error: 'Faltan datos obligatorios (nombre y categoría)' }, { status: 400 })
@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
         estadoPago: 'completado',
         estadoTour: 'entregado',
         categoria,
+        empresa: empresa || null,
         enlaceTour: enlaceTour || null,
         notas: notas || null,
         creadaManual: true,

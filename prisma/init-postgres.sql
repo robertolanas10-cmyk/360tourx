@@ -23,6 +23,7 @@ CREATE TABLE "reservas" (
     "estadoTour" TEXT NOT NULL DEFAULT 'pendiente',
     "notas" TEXT,
     "categoria" TEXT,
+    "empresa" TEXT,
     "enlaceTour" TEXT,
     "creadaManual" BOOLEAN NOT NULL DEFAULT false,
 
