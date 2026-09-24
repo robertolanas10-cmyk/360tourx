@@ -503,6 +503,14 @@ function AddClienteModal({ onClose, onCreated }: { onClose: () => void; onCreate
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [onClose])
+
   async function submit() {
     if (!nombre.trim()) {
       setError('Escribe el nombre del cliente o empresa.')
@@ -611,6 +619,14 @@ function TourFormModal({
   const [empresaFocused, setEmpresaFocused] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [onClose])
 
   function set<K extends keyof typeof form>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }))
