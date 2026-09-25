@@ -87,6 +87,7 @@ export default function BookingClient() {
     name: '',
     email: '',
     phone: '',
+    company: '',
     address: '',
   })
   const [clientSecret, setClientSecret] = useState<string | null>(null)
@@ -135,6 +136,8 @@ export default function BookingClient() {
           withAddon: withWebAddon,
           customerEmail: contactInfo.email,
           customerName: contactInfo.name,
+          customerPhone: contactInfo.phone,
+          empresa: contactInfo.company || undefined,
           bookingDate: selectedDate,
           bookingTime: selectedTime,
           address: contactInfo.address,
@@ -171,6 +174,7 @@ export default function BookingClient() {
         nombre: contactInfo.name,
         email: contactInfo.email,
         telefono: contactInfo.phone,
+        empresa: contactInfo.company || undefined,
         mensaje: `🏢 SOLICITUD TOUR VIRTUAL +300m²\n\n📅 Fecha preferida para la visita: ${selectedDate} a las ${selectedTime}\n📍 Dirección del espacio: ${contactInfo.address}\n\n📞 Tipo de reunión preferida: ${meetingTypeLabel}\n\n📝 Descripción del espacio:\n${meetingDescription || 'No especificada'}`,
         aceptaTerminos: true,
       }),
@@ -408,6 +412,16 @@ export default function BookingClient() {
               />
             </div>
             <div>
+              <label className="text-sm text-slate-400 mb-1.5 block">Empresa (opcional)</label>
+              <input
+                type="text"
+                value={contactInfo.company}
+                onChange={(e) => setContactInfo({ ...contactInfo, company: e.target.value })}
+                className="input-field"
+                placeholder="Nombre de tu inmobiliaria o negocio"
+              />
+            </div>
+            <div>
               <label className="text-sm text-slate-400 mb-1.5 block">
                 Dirección del inmueble *
               </label>
@@ -639,7 +653,7 @@ export default function BookingClient() {
             <div>
               <h2 className="text-xl font-bold text-white mb-6">Completa el pago</h2>
 
-              <p className="text-slate-400 text-sm mb-6">Tarjeta, Apple Pay o Google Pay.</p>
+              <p className="text-slate-400 text-sm mb-6">Pago seguro con tarjeta.</p>
 
               <Elements
                   stripe={stripePromise}

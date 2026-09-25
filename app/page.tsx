@@ -99,7 +99,7 @@ const whyUs = [
   {
     icon: Shield,
     title: 'Pagos seguros',
-    description: 'Transacciones encriptadas con Stripe. Aceptamos tarjeta, Apple Pay y Google Pay.',
+    description: 'Transacciones encriptadas con Stripe. Aceptamos pago con tarjeta.',
   },
   {
     icon: Star,

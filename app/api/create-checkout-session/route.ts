@@ -54,6 +54,8 @@ export async function POST(req: NextRequest) {
       withAddon,
       customerEmail,
       customerName,
+      customerPhone,
+      empresa,
       bookingDate,
       bookingTime,
       address,
@@ -98,6 +100,8 @@ export async function POST(req: NextRequest) {
       data: {
         nombre: customerName,
         email: customerEmail,
+        telefono: customerPhone || null,
+        empresa: empresa || null,
         direccion: address,
         servicio: serviceId,
         servicioNombre: SERVICE_NAMES[serviceId] || serviceId,

@@ -39,7 +39,7 @@ const advantages = [
   {
     icon: CheckCircle,
     title: 'Pago seguro',
-    description: 'Portal de pagos encriptado. Acepta tarjeta, Apple Pay y Google Pay.',
+    description: 'Portal de pagos encriptado. Acepta pago con tarjeta.',
   },
 ]
 

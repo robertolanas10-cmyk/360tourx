@@ -6,7 +6,7 @@ import { Lock, CreditCard } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Reserva tu Tour Virtual',
   description:
-    'Reserva tu tour virtual 360° online. Elige tu servicio, fecha y paga de forma segura con tarjeta, Apple Pay o Google Pay.',
+    'Reserva tu tour virtual 360° online. Elige tu servicio, fecha y paga de forma segura con tarjeta.',
 }
 
 export default function ReservaPage() {
@@ -34,7 +34,7 @@ export default function ReservaPage() {
             </div>
             <div className="flex items-center gap-2">
               <CreditCard size={14} className="text-violet-400" />
-              Tarjeta · Apple Pay · Google Pay
+              Pago con tarjeta
             </div>
             <div className="flex items-center gap-2">
               <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
