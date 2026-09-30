@@ -78,10 +78,10 @@ const services = [
 ]
 
 const stats = [
-  { target: 98, prefix: '+', suffix: '', decimals: 0, label: 'Tours realizados', icon: Camera },
-  { target: 72, prefix: '', suffix: 'h', decimals: 0, label: 'Tiempo de entrega', icon: Clock },
-  { target: 4.8, prefix: '', suffix: '', decimals: 1, label: 'Valoración media', icon: Star },
-  { target: 57488, prefix: '+', suffix: '', decimals: 0, label: 'Visitas generadas a clientes', icon: Eye },
+  { value: '+98', target: 98, prefix: '+', suffix: '', decimals: 0, animated: true, duration: 1500, label: 'Tours realizados', icon: Camera },
+  { value: '72h', target: 72, prefix: '', suffix: 'h', decimals: 0, animated: false, duration: 1500, label: 'Tiempo de entrega', icon: Clock },
+  { value: '4.8', target: 4.8, prefix: '', suffix: '', decimals: 1, animated: false, duration: 1500, label: 'Valoración media', icon: Star },
+  { value: '+57.488', target: 57488, prefix: '+', suffix: '', decimals: 0, animated: true, duration: 2800, label: 'Visitas generadas a clientes', icon: Eye },
 ]
 
 const whyUs = [
@@ -164,12 +164,17 @@ export default function HomePage() {
                 <div key={stat.label} className="text-center sm:text-left">
                   <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
                     <stat.icon size={20} className="text-violet-400" />
-                    <StatCounter
-                      target={stat.target}
-                      prefix={stat.prefix}
-                      suffix={stat.suffix}
-                      decimals={stat.decimals}
-                    />
+                    {stat.animated ? (
+                      <StatCounter
+                        target={stat.target}
+                        prefix={stat.prefix}
+                        suffix={stat.suffix}
+                        decimals={stat.decimals}
+                        duration={stat.duration}
+                      />
+                    ) : (
+                      <div className="text-3xl font-bold text-white">{stat.value}</div>
+                    )}
                   </div>
                   <div className="text-sm text-slate-500">{stat.label}</div>
                 </div>
