@@ -66,8 +66,8 @@ export default function ProyectosPage() {
             <span className="gradient-text">360TourX</span>
           </h1>
           <p className="text-xl text-slate-400 leading-relaxed">
-            Restaurantes, hoteles y showrooms que han transformado su visibilidad online
-            con un tour virtual 360°.
+            Inmuebles, locales comerciales, restaurantes, exposiciones y showrooms que han
+            transformado su visibilidad online con un tour virtual 360°.
           </p>
         </div>
       </section>
