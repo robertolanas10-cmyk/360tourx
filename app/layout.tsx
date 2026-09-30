@@ -4,7 +4,7 @@ import SiteShell from '@/components/SiteShell'
 
 export const metadata: Metadata = {
   title: {
-    default: '360TourX | Tours Virtuales 360° en Madrid',
+    default: '360TourX | Tours Virtuales 360°',
     template: '%s | 360TourX',
   },
   description:
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     locale: 'es_ES',
     url: 'https://360tourx.com',
     siteName: '360TourX',
-    title: '360TourX | Tours Virtuales 360° en Madrid',
+    title: '360TourX | Tours Virtuales 360°',
     description:
       'Expertos en tours virtuales 360° para inmuebles, hoteles, restaurantes y negocios en Madrid.',
     images: [
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '360TourX | Tours Virtuales 360° en Madrid',
+    title: '360TourX | Tours Virtuales 360°',
     description: 'Expertos en tours virtuales 360° para inmuebles y negocios en Madrid.',
   },
   robots: {
