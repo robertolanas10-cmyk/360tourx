@@ -41,7 +41,7 @@ export default function StatCounter({
         const start = performance.now()
         const tick = (now: number) => {
           const progress = Math.min((now - start) / duration, 1)
-          const eased = 1 - Math.pow(1 - progress, 3)
+          const eased = 1 - Math.pow(1 - progress, 5)
           setDisplay(formatValue(target * eased, decimals))
           if (progress < 1) requestAnimationFrame(tick)
         }
